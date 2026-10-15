@@ -7,516 +7,1000 @@
 <title>NEXUS | AI Learning Partner</title>
 <style>
 :root {
-  --bg: #070b17;
-  --panel: #10182b;
-  --line: #263756;
-  --cyan: #62eaff;
-  --purple: #a18bff;
-  --text: #edf5ff;
-  --muted: #9aabc5;
+  --bg:#070b17;
+  --panel:#10182b;
+  --line:#263756;
+  --cyan:#62eaff;
+  --purple:#a18bff;
+  --text:#edf5ff;
+  --muted:#9aabc5;
+  --user:#102b40;
+  --radius:14px;
+  --font-size:15px;
 }
-* { box-sizing: border-box; }
+* { box-sizing:border-box; }
+html,body { margin:0; min-height:100%; }
 body {
-  margin: 0;
-  background: radial-gradient(ellipse at top, #182747 0%, var(--bg) 58%);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Noto Sans JP", sans-serif;
-  min-height: 100vh;
+  background:radial-gradient(ellipse at top,#182747 0%,var(--bg) 60%);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;
+  font-size:var(--font-size);
 }
-button, textarea, select { font: inherit; }
-button { cursor: pointer; }
-header {
-  padding: 20px;
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+button,textarea,select,input { font:inherit; }
+button { cursor:pointer; color:var(--text); }
+button:disabled { opacity:.5; cursor:wait; }
+button:focus-visible,textarea:focus-visible,select:focus-visible {
+  outline:2px solid var(--cyan);
+  outline-offset:2px;
+}
+.topbar {
+  height:68px;
+  padding:0 22px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
 }
 .logo {
-  font-size: 25px;
-  font-weight: 800;
-  letter-spacing: 5px;
-  color: var(--cyan);
-  text-shadow: 0 0 18px #62eaff55;
+  font-size:25px;
+  font-weight:850;
+  letter-spacing:5px;
+  color:var(--cyan);
+  text-shadow:0 0 18px #62eaff55;
 }
-.subtitle { color: var(--muted); font-size: 12px; margin-top: 5px; }
-.status { color: #8fffd0; font-size: 12px; }
-main { max-width: 850px; margin: auto; padding: 24px 16px 40px; }
-.core-area { text-align: center; padding: 10px 0 20px; }
+.subtitle { font-size:10px; color:var(--muted); letter-spacing:2px; }
+.top-right { display:flex; align-items:center; gap:14px; }
+.status { font-size:12px; color:#8fffd0; }
+.icon-button {
+  width:40px;height:40px;padding:0;
+  border:1px solid var(--line);border-radius:12px;
+  background:var(--panel);font-size:19px;
+}
+.workspace {
+  height:calc(100dvh - 68px);
+  min-height:540px;
+  display:grid;
+  grid-template-columns:minmax(0,3fr) minmax(320px,2fr);
+  gap:14px;
+  padding:14px;
+  max-width:1800px;
+  margin:auto;
+}
+.left-column,.right-column { min-width:0;min-height:0; }
+.left-column {
+  display:grid;
+  grid-template-rows:minmax(210px,4fr) minmax(0,1fr);
+  gap:12px;
+}
+.stage {
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:linear-gradient(160deg,#101b33bb,#090e1caa);
+  padding:16px;
+}
 .core {
-  width: 145px;
-  height: 145px;
-  margin: 0 auto 18px;
-  border-radius: 50%;
-  position: relative;
-  display: grid;
-  place-items: center;
+  width:clamp(100px,13vw,155px);
+  height:clamp(100px,13vw,155px);
+  flex-shrink:0;
+  position:relative;
+  display:grid;
+  place-items:center;
+  margin-bottom:10px;
 }
 .ring {
-  position: absolute;
-  inset: 4px;
-  border: 1px solid #62eaff88;
-  border-radius: 50%;
-  box-shadow: 0 0 22px #62eaff25, inset 0 0 20px #62eaff18;
-  animation: rotate 8s linear infinite;
+  position:absolute;inset:3px;
+  border:1px solid #62eaff88;border-radius:50%;
+  box-shadow:0 0 22px #62eaff25,inset 0 0 20px #62eaff18;
+  animation:rotate 8s linear infinite;
 }
 .ring:nth-child(2) {
-  inset: 16px;
-  border-color: #a18bff99;
-  border-style: dashed;
-  animation-direction: reverse;
-  animation-duration: 12s;
+  inset:13px;border-color:#a18bff99;border-style:dashed;
+  animation-direction:reverse;animation-duration:12s;
 }
-.ring:nth-child(3) {
-  inset: 29px;
-  border-color: #62eaff66;
-  animation-duration: 5s;
-}
+.ring:nth-child(3) { inset:25px;border-color:#62eaff66;animation-duration:5s; }
 .orb {
-  width: 61px;
-  height: 61px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fff, #62eaff 25%, #5474ff 65%, #25184e);
-  box-shadow: 0 0 35px #62eaff99, 0 0 70px #6757ff44;
-  animation: pulse 2.5s ease-in-out infinite;
+  width:42%;height:42%;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff,#62eaff 25%,#5474ff 65%,#25184e);
+  box-shadow:0 0 35px #62eaff99,0 0 70px #6757ff44;
+  animation:pulse 2.5s ease-in-out infinite;
 }
-body.speaking .orb { animation-duration: .7s; }
-@keyframes rotate { to { transform: rotate(360deg); } }
+body.speaking .orb { animation-duration:.65s; }
+body.thinking .ring { animation-duration:2s; }
+@keyframes rotate { to { transform:rotate(360deg); } }
 @keyframes pulse {
-  50% { transform: scale(1.12); filter: brightness(1.25); }
+  50% { transform:scale(1.12);filter:brightness(1.25); }
 }
-h1 { font-size: 22px; margin: 0 0 8px; }
-.description { color: var(--muted); font-size: 13px; line-height: 1.8; }
+.stage-title { font-size:clamp(17px,2vw,24px);font-weight:700;margin:0 0 8px; }
+.stage-hint { color:var(--muted);font-size:12px;line-height:1.7; }
+.caption-area {
+  width:100%;max-width:900px;
+  font-size:clamp(14px,1.5vw,18px);
+  line-height:1.9;
+  max-height:25%;
+  overflow:auto;
+  padding:0 8px;
+  color:#dffaff;
+  overflow-wrap:anywhere;
+}
+.caption-area:empty { display:none; }
+.answer-panel {
+  min-height:0;overflow:auto;
+  padding:18px 20px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:#0b1324e8;
+  scroll-behavior:smooth;
+}
+.answer-top {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin-bottom:12px;
+}
+.section-label { color:var(--cyan);font-size:11px;letter-spacing:1.5px; }
+.answer-title { font-size:17px;font-weight:700;margin:5px 0 0; }
+.answer-text { line-height:1.95;white-space:pre-wrap;overflow-wrap:anywhere; }
+.answer-text:empty::before { content:"質問すると、ここに解説全文が表示されます。";color:var(--muted); }
+.answer-text strong { color:var(--cyan); }
+.right-column {
+  display:grid;
+  grid-template-rows:minmax(0,1fr) minmax(0,2fr);
+  gap:12px;
+}
 .panel {
-  background: #10182be8;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 18px;
-  margin-bottom: 16px;
-  box-shadow: 0 12px 35px #0002;
+  min-height:0;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:#10182be8;
+  padding:16px;
+  overflow:auto;
 }
-.row { display: flex; gap: 10px; flex-wrap: wrap; }
-label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 7px; }
-.field { flex: 1; min-width: 135px; }
-select, textarea {
-  width: 100%;
-  background: #080f20;
-  border: 1px solid #30415f;
-  border-radius: 10px;
-  color: var(--text);
-  padding: 12px;
-  outline: none;
+.panel-heading {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;margin-bottom:14px;
 }
-select:focus, textarea:focus { border-color: var(--cyan); }
-textarea { resize: vertical; min-height: 95px; line-height: 1.7; }
-button {
-  border: 1px solid #385273;
-  color: var(--text);
-  background: #182640;
-  border-radius: 10px;
-  padding: 11px 15px;
-  transition: .2s;
+.panel-title { font-size:14px;font-weight:700; }
+.metrics { display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px; }
+.metric {
+  padding:10px;border-radius:10px;
+  background:#080f20;border:1px solid #263756;
 }
-button:hover { border-color: var(--cyan); }
-button:disabled { opacity: .5; cursor: wait; }
-.primary {
-  background: linear-gradient(110deg, #087d9a, #5143a6);
-  border: none;
-  font-weight: 700;
+.metric-label { font-size:11px;color:var(--muted);margin-bottom:5px; }
+.metric-value { font-size:21px;font-weight:750;font-variant-numeric:tabular-nums; }
+.metric-value small { font-size:11px;font-weight:400;color:var(--muted); }
+.bar-group { margin:12px 0; }
+.bar-heading { display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--muted);margin-bottom:6px; }
+.bar-track { height:8px;background:#263756;border-radius:99px;overflow:hidden; }
+.bar-fill { height:100%;width:0;border-radius:99px;transition:width .5s ease; }
+#answerBar { background:linear-gradient(90deg,#62eaff,#5474ff); }
+#speechBar { background:linear-gradient(90deg,#a18bff,#ed9aff); }
+.panel-note { font-size:11px;line-height:1.6;color:var(--muted); }
+label { display:block;font-size:12px;color:var(--muted);margin-bottom:6px; }
+select,textarea,input[type="text"],input[type="number"] {
+  width:100%;color:var(--text);background:#080f20;
+  border:1px solid #30415f;border-radius:10px;padding:11px;
 }
-.primary:hover { filter: brightness(1.15); }
-.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-.small { font-size: 12px; color: var(--muted); line-height: 1.7; }
-#messages { display: flex; flex-direction: column; gap: 13px; }
-.message {
-  border: 1px solid var(--line);
-  background: #0b1324;
-  border-radius: 14px;
-  padding: 14px;
-  line-height: 1.85;
-  overflow-wrap: anywhere;
+select { min-width:0; }
+textarea { min-height:95px;resize:vertical;line-height:1.7; }
+select:focus,textarea:focus,input:focus { border-color:var(--cyan);outline:none; }
+.field-row { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
+.field { min-width:0;margin-bottom:12px; }
+.actions { display:flex;gap:8px;flex-wrap:wrap;margin-top:10px; }
+.btn {
+  border:1px solid #385273;background:#182640;
+  border-radius:10px;padding:10px 12px;font-size:12px;
 }
-.message.user { border-color: #375f7d; background: #102337; }
-.message-name { color: var(--cyan); font-size: 12px; margin-bottom: 7px; }
-.message.user .message-name { color: #a8caff; }
-.message-text { white-space: pre-wrap; }
-.message-tools { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
-.message-tools button { font-size: 12px; padding: 7px 10px; }
-.caption-box {
-  min-height: 66px;
-  padding: 14px;
-  background: #080f20;
-  border: 1px solid #263756;
-  border-radius: 12px;
-  text-align: center;
-  line-height: 1.8;
-  color: #dffaff;
+.btn:hover { border-color:var(--cyan); }
+.btn.primary { background:linear-gradient(110deg,#087d9a,#5143a6);border:0;font-weight:700; }
+.btn.primary:hover { filter:brightness(1.15); }
+.btn.full { width:100%; }
+#question { min-height:115px; }
+.question-panel { display:flex;flex-direction:column; }
+.question-panel form { display:flex;flex-direction:column;min-height:0; }
+.question-panel textarea { flex:1; }
+#messages { display:none; }
+.answer-tools { display:flex;gap:8px;flex-wrap:wrap;margin-top:14px; }
+.answer-tools .btn { padding:8px 10px; }
+.muted { color:var(--muted); }
+.small { font-size:11px;line-height:1.7;color:var(--muted); }
+.hidden { display:none!important; }
+.modal-backdrop {
+  position:fixed;inset:0;z-index:20;
+  background:#030711bb;display:flex;justify-content:flex-end;
 }
-.caption-label { font-size: 11px; color: var(--cyan); margin-bottom: 5px; }
-footer { text-align: center; color: #7285a4; font-size: 11px; padding: 10px; }
-.hidden { display: none !important; }
+.drawer {
+  width:min(440px,100%);height:100%;
+  overflow:auto;background:#0d1527;
+  border-left:1px solid var(--line);padding:22px;
+  box-shadow:-15px 0 50px #0005;
+}
+.drawer-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:22px; }
+.drawer h2 { font-size:20px;margin:0; }
+.setting-section { border-bottom:1px solid var(--line);padding:16px 0; }
+.setting-section h3 { font-size:13px;color:var(--cyan);margin:0 0 14px; }
+input[type="range"] { width:100%;accent-color:var(--cyan); }
+.history-list { display:flex;flex-direction:column;gap:8px; }
+.history-item {
+  width:100%;text-align:left;padding:12px;border:1px solid var(--line);
+  border-radius:10px;background:#10182b;color:var(--text);
+}
+.history-item:hover { border-color:var(--cyan); }
+.history-item-title { font-size:13px;font-weight:650;overflow-wrap:anywhere; }
+.history-item-date { font-size:10px;color:var(--muted);margin-top:5px; }
+.toast {
+  position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+  padding:10px 15px;background:#182640;border:1px solid #385273;
+  border-radius:10px;z-index:50;font-size:12px;
+}
+body.theme-light {
+  --bg:#edf3fb;--panel:#fff;--line:#cad5e5;--text:#17253b;--muted:#596c86;
+  background:linear-gradient(150deg,#e8f6ff,#f5f4ff);
+}
+body.theme-light .stage,body.theme-light .answer-panel,
+body.theme-light .panel,body.theme-light .drawer,body.theme-light .history-item {
+  background:#ffffffeb;
+}
+body.theme-light select,body.theme-light textarea,
+body.theme-light input[type="text"],body.theme-light input[type="number"],
+body.theme-light .metric,body.theme-light .caption-area {
+  background:#f4f7fc;color:var(--text);
+}
+body.theme-light .btn { color:var(--text);background:#e8eef8; }
+body.theme-light .btn.primary { color:#fff;background:linear-gradient(110deg,#087d9a,#5143a6); }
+body.compact .workspace { gap:8px;padding:8px; }
+body.compact .panel,body.compact .answer-panel { padding:12px; }
+body.large-text { --font-size:17px; }
+@media(max-width:800px) {
+  .topbar { height:62px;padding:0 14px; }
+  .workspace {
+    height:auto;min-height:0;grid-template-columns:1fr;
+    padding:10px;gap:10px;
+  }
+  .left-column { grid-template-rows:minmax(270px,45vh) minmax(240px,auto); }
+  .right-column { grid-template-rows:auto auto; }
+  .metrics { grid-template-columns:1fr 1fr; }
+  .stage { padding:12px; }
+  .answer-panel { max-height:none; }
+  .question-panel { min-height:330px; }
+  #question { min-height:110px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation-duration:.01ms!important;transition-duration:.01ms!important; }
+}
 </style>
 </head>
 <body>
-<header>
+<header class="topbar">
   <div>
     <div class="logo">NEXUS</div>
     <div class="subtitle">YOUR AI LEARNING PARTNER</div>
   </div>
-  <div class="status" id="status">● READY</div>
+  <div class="top-right">
+    <div class="status" id="status" aria-live="polite">● READY</div>
+    <button class="icon-button" id="openSettings" aria-label="設定を開く" title="設定">⚙</button>
+  </div>
 </header>
 
-<main>
-  <section class="core-area">
-    <div class="core" aria-label="NEXUS AI">
-      <div class="ring"></div>
-      <div class="ring"></div>
-      <div class="ring"></div>
-      <div class="orb"></div>
-    </div>
-    <h1>一緒に考え、理解する。</h1>
-    <div class="description">
-      あなた専用のAI家庭教師 NEXUS<br>
-      質問を送ると、AIが回答して音声で読み上げます。
-    </div>
-  </section>
-
-  <section class="panel">
-    <div class="row">
-      <div class="field">
-        <label for="subject">教科</label>
-        <select id="subject">
-          <option>指定なし</option>
-          <option>数学</option>
-          <option>英語</option>
-          <option>現代文・論理国語</option>
-          <option>古典</option>
-          <option>日本史</option>
-          <option>地理</option>
-          <option>化学</option>
-          <option>物理</option>
-          <option>情報</option>
-        </select>
+<main class="workspace">
+  <section class="left-column">
+    <section class="stage">
+      <div class="core" aria-label="NEXUS AI">
+        <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+        <div class="orb"></div>
       </div>
-      <div class="field">
-        <label for="level">説明のレベル</label>
-        <select id="level">
-          <option>高校生向け</option>
-          <option>中学生向け</option>
-          <option>基礎から丁寧に</option>
-          <option>発展・応用</option>
-        </select>
+      <h1 class="stage-title" id="stageTitle">一緒に考え、理解する。</h1>
+      <div class="stage-hint" id="stageHint">あなた専用のAI家庭教師 NEXUS</div>
+      <div class="caption-area" id="caption" aria-live="polite">質問を送ると、字幕がここに表示されます。</div>
+    </section>
+
+    <section class="answer-panel">
+      <div class="answer-top">
+        <div>
+          <div class="section-label">EXPLANATION / 解説全文</div>
+          <div class="answer-title" id="answerHeading">AIの解説</div>
+        </div>
+        <button class="btn" id="scrollAnswer">最新の解説 ↓</button>
       </div>
-    </div>
-
-    <div class="actions">
-      <button class="primary" id="enableVoice">🔊 音声を有効にする</button>
-      <button id="stopVoice">⏹ 読み上げ停止</button>
-    </div>
-    <p class="small" id="voiceStatus">
-      最初に「音声を有効にする」を押してね。音声が出ない場合は、回答ごとの読み上げボタンも使えます。
-    </p>
-  </section>
-
-  <section class="panel">
-    <label for="question">NEXUSに質問する</label>
-    <textarea id="question" placeholder="例：二次関数の最大値と最小値を教えて！"></textarea>
-    <div class="actions">
-      <button class="primary" id="send">質問を送信する ➤</button>
-      <button id="mic">🎙️ 音声入力</button>
-      <button id="clear">会話をリセット</button>
-    </div>
-    <p class="small">Enterで送信はせず、改行できます。音声入力は対応ブラウザで利用できます。</p>
-  </section>
-
-  <section class="panel">
-    <div class="caption-label">LIVE CAPTIONS / 字幕</div>
-    <div class="caption-box" id="caption">AIの回答をここに表示します。</div>
-  </section>
-
-  <section class="panel">
-    <div class="caption-label">CONVERSATION / 会話</div>
-    <div id="messages">
-      <div class="message">
-        <div class="message-name">NEXUS AI</div>
-        <div class="message-text">こんにちは！わからない問題や気になることを聞いてね。一緒に考えていこう！</div>
+      <div class="answer-text" id="answerText"></div>
+      <div class="answer-tools">
+        <button class="btn" id="readAnswer">🔊 読み上げる</button>
+        <button class="btn" id="stopSpeech">⏹ 停止</button>
+        <button class="btn" id="copyAnswer">📋 解説をコピー</button>
       </div>
-    </div>
+    </section>
   </section>
-  <footer>NEXUS · AI Learning Partner</footer>
+
+  <section class="right-column">
+    <section class="panel">
+      <div class="panel-heading">
+        <div class="panel-title">回答状況</div>
+        <div class="small" id="activity">待機中</div>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-label">AI回答時間</div>
+          <div class="metric-value"><span id="answerSeconds">—</span><small> 秒</small></div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">読み上げ推定時間</div>
+          <div class="metric-value"><span id="speechSeconds">—</span><small> 秒</small></div>
+        </div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-heading"><span>AI回答処理</span><span id="answerBarLabel">未計測</span></div>
+        <div class="bar-track"><div class="bar-fill" id="answerBar"></div></div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-heading"><span>音声読み上げ</span><span id="speechBarLabel">未計測</span></div>
+        <div class="bar-track"><div class="bar-fill" id="speechBar"></div></div>
+      </div>
+      <div class="panel-note">棒の長さは、今回の処理時間を直近の回答と比較した目安です。読み上げ時間は推定値です。</div>
+      <div class="actions">
+        <button class="btn" id="enableVoice">🔊 音声を有効にする</button>
+        <button class="btn" id="stopVoice">⏹ 音声停止</button>
+      </div>
+      <div class="small" id="voiceStatus" aria-live="polite">読み上げは端末の音声機能を使用します。</div>
+    </section>
+
+    <section class="panel question-panel">
+      <div class="panel-heading">
+        <div class="panel-title">質問する</div>
+        <button class="btn" id="newChat">＋ 新しい会話</button>
+      </div>
+      <form id="questionForm">
+        <div class="field-row">
+          <div class="field">
+            <label for="subject">教科</label>
+            <select id="subject">
+              <option>指定なし</option><option>数学</option><option>英語</option>
+              <option>現代文・論理国語</option><option>古典</option>
+              <option>日本史</option><option>地理</option><option>化学</option>
+              <option>物理</option><option>情報</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="level">説明レベル</label>
+            <select id="level">
+              <option>高校生向け</option><option>中学生向け</option>
+              <option>基礎から丁寧に</option><option>発展・応用</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="question">質問内容</label>
+          <textarea id="question" placeholder="例：二次関数の最大値と最小値を教えて！" required></textarea>
+        </div>
+        <div class="actions">
+          <button class="btn primary" type="submit" id="send" style="flex:1">質問を送信する ➤</button>
+          <button class="btn" type="button" id="mic">🎙 音声入力</button>
+        </div>
+      </form>
+      <p class="small">Enterで改行できます。送信はボタンを押してください。</p>
+      <div class="small" id="errorText" role="status"></div>
+    </section>
+  </section>
 </main>
 
+<div id="settingsBackdrop" class="modal-backdrop hidden">
+  <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="drawer-header">
+      <h2 id="settingsTitle">⚙ NEXUS設定</h2>
+      <button class="icon-button" id="closeSettings" aria-label="設定を閉じる">✕</button>
+    </div>
+
+    <section class="setting-section">
+      <h3>音声設定</h3>
+      <div class="field">
+        <label for="voiceSelect">読み上げ音声</label>
+        <select id="voiceSelect"><option value="">端末の標準音声</option></select>
+        <div class="small">表示される音声は、ブラウザと端末が提供するものです。</div>
+      </div>
+      <div class="field">
+        <label for="speedRange">読み上げ速度：<span id="speedValue">0.95</span> 倍</label>
+        <input id="speedRange" type="range" min="0.7" max="1.3" step="0.05" value="0.95">
+      </div>
+      <div class="field">
+        <label for="autoSpeak"><input type="checkbox" id="autoSpeak" checked> 回答後に自動で読み上げる</label>
+      </div>
+      <button class="btn" id="testVoice">音声テスト</button>
+    </section>
+
+    <section class="setting-section">
+      <h3>画面デザイン</h3>
+      <div class="field">
+        <label for="themeSelect">配色</label>
+        <select id="themeSelect">
+          <option value="dark">ダーク（標準）</option>
+          <option value="light">ライト</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="layoutSelect">表示密度</label>
+        <select id="layoutSelect">
+          <option value="normal">標準</option>
+          <option value="compact">コンパクト</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="fontSelect">文字サイズ</label>
+        <select id="fontSelect">
+          <option value="normal">標準</option>
+          <option value="large">大きめ</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="setting-section">
+      <h3>会話履歴</h3>
+      <p class="small">このブラウザに保存された会話を表示します。端末やブラウザを変えると共有されません。</p>
+      <div class="actions">
+        <button class="btn" id="exportHistory">履歴をダウンロード</button>
+        <button class="btn" id="deleteHistory">履歴をすべて削除</button>
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </section>
+    <p class="small">設定と履歴はブラウザ内に保存します。プライベートブラウズやブラウザのデータ削除などにより、保存内容が消える場合があります。</p>
+  </aside>
+</div>
+<div id="toast" class="toast hidden" role="status"></div>
+
 <script>
-/* Cloudflare Worker URL */
+"use strict";
+
+/* 既存のCloudflare Worker。接続先は変更しない */
 const WORKER_URL = "https://autumn-dawn-0525.sur0730donald.workers.dev/";
 
 const $ = id => document.getElementById(id);
-const messagesEl = $("messages");
-const questionEl = $("question");
-const captionEl = $("caption");
-const statusEl = $("status");
-const voiceStatusEl = $("voiceStatus");
+const STORAGE_KEY = "nexus_history_v2";
+const SETTINGS_KEY = "nexus_settings_v2";
+const MAX_HISTORY = 30;
 
-let history = [];
+let conversations = [];
+let currentConversationId = null;
+let currentAnswer = "";
+let busy = false;
 let voiceReady = false;
 let selectedVoice = null;
-let currentUtterance = null;
 let recognition = null;
-let busy = false;
+let speechUtterance = null;
+let answerStartedAt = 0;
+let toastTimer = null;
+let settings = {
+  voiceURI:"",
+  rate:0.95,
+  autoSpeak:true,
+  theme:"dark",
+  layout:"normal",
+  font:"normal"
+};
 
-function setStatus(text) {
-  statusEl.textContent = "● " + text;
-}
-
-function getJapaneseVoice() {
-  if (!("speechSynthesis" in window)) return null;
-  const voices = speechSynthesis.getVoices();
-  return voices.find(v => /^ja[-_]/i.test(v.lang) && /natural|enhanced/i.test(v.name))
-      || voices.find(v => /^ja[-_]/i.test(v.lang))
-      || voices.find(v => v.lang.toLowerCase().startsWith("ja"))
-      || null;
-}
-
-if ("speechSynthesis" in window) {
-  speechSynthesis.onvoiceschanged = () => {
-    selectedVoice = getJapaneseVoice();
-  };
-  selectedVoice = getJapaneseVoice();
-}
-
-function addMessage(role, text, speakable = false) {
-  const article = document.createElement("article");
-  article.className = "message " + (role === "user" ? "user" : "");
-  const name = document.createElement("div");
-  name.className = "message-name";
-  name.textContent = role === "user" ? "YOU / あなた" : "NEXUS AI";
-  const content = document.createElement("div");
-  content.className = "message-text";
-  content.textContent = text;
-  article.append(name, content);
-
-  if (speakable) {
-    const tools = document.createElement("div");
-    tools.className = "message-tools";
-    const play = document.createElement("button");
-    play.textContent = "🔊 この回答を読み上げる";
-    play.addEventListener("click", () => speakText(text));
-    const stop = document.createElement("button");
-    stop.textContent = "⏹ 停止";
-    stop.addEventListener("click", stopSpeech);
-    tools.append(play, stop);
-    article.append(tools);
+function safeLoad(key, fallback) {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch {
+    return fallback;
   }
+}
+function saveSettings() {
+  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }
+  catch { showToast("設定を保存できませんでした。"); }
+}
+function saveConversations() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations.slice(0, MAX_HISTORY)));
+  } catch {
+    showToast("履歴を保存できません。ブラウザの保存容量を確認してください。");
+  }
+}
+function showToast(message) {
+  const el = $("toast");
+  el.textContent = message;
+  el.classList.remove("hidden");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.add("hidden"), 2800);
+}
+function setStatus(text) { $("status").textContent = "● " + text; }
+function setActivity(text) { $("activity").textContent = text; }
 
-  messagesEl.append(article);
-  article.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  return article;
+function newId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+function makeTitle(text) {
+  const clean = String(text).replace(/\s+/g, " ").trim();
+  return clean.length > 25 ? clean.slice(0, 25) + "…" : (clean || "新しい会話");
+}
+function formatDate(value) {
+  try { return new Date(value).toLocaleString("ja-JP", {month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"}); }
+  catch { return ""; }
+}
+function activeConversation() {
+  return conversations.find(c => c.id === currentConversationId) || null;
+}
+function ensureConversation(question) {
+  let conversation = activeConversation();
+  if (!conversation) {
+    conversation = {
+      id:newId(), title:makeTitle(question), createdAt:Date.now(),
+      updatedAt:Date.now(), messages:[]
+    };
+    conversations.unshift(conversation);
+    currentConversationId = conversation.id;
+  }
+  if (!conversation.messages.length) conversation.title = makeTitle(question);
+  conversation.updatedAt = Date.now();
+  return conversation;
 }
 
+function applySettings() {
+  document.body.classList.toggle("theme-light", settings.theme === "light");
+  document.body.classList.toggle("compact", settings.layout === "compact");
+  document.body.classList.toggle("large-text", settings.font === "large");
+  $("speedRange").value = String(settings.rate);
+  $("speedValue").textContent = Number(settings.rate).toFixed(2);
+  $("autoSpeak").checked = Boolean(settings.autoSpeak);
+  $("themeSelect").value = settings.theme;
+  $("layoutSelect").value = settings.layout;
+  $("fontSelect").value = settings.font;
+}
+function getVoices() {
+  if (!("speechSynthesis" in window)) return [];
+  return window.speechSynthesis.getVoices();
+}
+function refreshVoices() {
+  const select = $("voiceSelect");
+  const previous = settings.voiceURI || select.value;
+  const voices = getVoices();
+  select.replaceChildren();
+  const standard = document.createElement("option");
+  standard.value = "";
+  standard.textContent = "日本語音声を自動選択";
+  select.append(standard);
+
+  const japanese = voices.filter(v => /^ja([-_]|$)/i.test(v.lang) || v.lang.toLowerCase().startsWith("ja"));
+  japanese.forEach(voice => {
+    const option = document.createElement("option");
+    option.value = voice.voiceURI;
+    option.textContent = voice.name + "（" + voice.lang + "）";
+    select.append(option);
+  });
+  select.value = japanese.some(v => v.voiceURI === previous) ? previous : "";
+  selectedVoice = japanese.find(v => v.voiceURI === select.value) || chooseJapaneseVoice();
+}
+function chooseJapaneseVoice() {
+  const voices = getVoices();
+  return voices.find(v => v.voiceURI === settings.voiceURI)
+    || voices.find(v => /^ja([-_]|$)/i.test(v.lang) && /natural|premium|enhanced/i.test(v.name))
+    || voices.find(v => /^ja([-_]|$)/i.test(v.lang))
+    || voices.find(v => v.lang.toLowerCase().startsWith("ja"))
+    || null;
+}
 function stopSpeech() {
-  if ("speechSynthesis" in window) {
-    speechSynthesis.cancel();
-  }
-  currentUtterance = null;
+  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+  speechUtterance = null;
   document.body.classList.remove("speaking");
   setStatus(busy ? "THINKING" : "READY");
+}
+function cleanForSpeech(text) {
+  return String(text)
+    .replace(/```[\s\S]*?```/g, "コード部分は画面の解説を確認してください。")
+    .replace(/https?:\/\/\S+/g, "リンク")
+    .replace(/^\s{0,3}#{1,6}\s*/gm, "")
+    .replace(/[*_`>|]/g, "")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .trim();
+}
+function estimateSpeechSeconds(text) {
+  const cleaned = cleanForSpeech(text);
+  const japaneseChars = (cleaned.match(/[ぁ-んァ-ヶ一-龠々ー]/g) || []).length;
+  const otherWords = (cleaned.match(/[a-zA-Z0-9]+/g) || []).length;
+  const rate = Number(settings.rate) || 1;
+  return Math.max(1, Math.ceil((japaneseChars / (6.5 * rate)) + (otherWords * 0.35 / rate)));
+}
+function updateTiming(answerSeconds, answer) {
+  const speechSeconds = estimateSpeechSeconds(answer);
+  $("answerSeconds").textContent = Number(answerSeconds).toFixed(1);
+  $("speechSeconds").textContent = String(speechSeconds);
+  const base = Math.max(Number(answerSeconds), speechSeconds, 1);
+  $("answerBar").style.width = Math.min(100, Number(answerSeconds) / base * 100) + "%";
+  $("speechBar").style.width = Math.min(100, speechSeconds / base * 100) + "%";
+  $("answerBarLabel").textContent = Number(answerSeconds).toFixed(1) + " 秒";
+  $("speechBarLabel").textContent = "約 " + speechSeconds + " 秒";
+}
+function renderAnswer(text, title) {
+  currentAnswer = text || "";
+  $("answerText").textContent = currentAnswer;
+  $("answerHeading").textContent = title || "AIの解説";
+  $("caption").textContent = currentAnswer
+    ? currentAnswer.slice(0, 160)
+    : "質問を送ると、字幕がここに表示されます。";
+}
+function renderHistoryList() {
+  const list = $("historyList");
+  list.replaceChildren();
+  const sorted = [...conversations].sort((a,b) => b.updatedAt - a.updatedAt);
+  if (!sorted.length) {
+    const empty = document.createElement("p");
+    empty.className = "small";
+    empty.textContent = "まだ履歴はありません。質問すると、ここに保存されます。";
+    list.append(empty);
+    return;
+  }
+  sorted.forEach(conversation => {
+    const button = document.createElement("button");
+    button.className = "history-item";
+    const title = document.createElement("div");
+    title.className = "history-item-title";
+    title.textContent = conversation.title || "新しい会話";
+    const date = document.createElement("div");
+    date.className = "history-item-date";
+    date.textContent = formatDate(conversation.updatedAt) + " · " + conversation.messages.length + "件";
+    button.append(title,date);
+    button.addEventListener("click", () => loadConversation(conversation.id));
+    list.append(button);
+  });
+}
+function loadConversation(id) {
+  const conversation = conversations.find(c => c.id === id);
+  if (!conversation) return;
+  currentConversationId = id;
+  const messages = conversation.messages || [];
+  const lastAssistant = [...messages].reverse().find(m => m.role === "assistant");
+  renderAnswer(lastAssistant ? lastAssistant.content : "", conversation.title);
+  if (lastAssistant) {
+    updateTiming(lastAssistant.seconds || 0, lastAssistant.content);
+  } else {
+    $("answerSeconds").textContent = "—";
+    $("speechSeconds").textContent = "—";
+  }
+  $("stageTitle").textContent = conversation.title || "会話履歴";
+  $("stageHint").textContent = "履歴を表示中 · " + messages.length + "件のメッセージ";
+  $("caption").textContent = lastAssistant ? lastAssistant.content.slice(0,160) : "この会話にはまだAIの回答がありません。";
+  $("settingsBackdrop").classList.add("hidden");
+  showToast("履歴を開きました。");
+}
+function startNewConversation() {
+  stopSpeech();
+  currentConversationId = null;
+  currentAnswer = "";
+  renderAnswer("", "AIの解説");
+  $("stageTitle").textContent = "一緒に考え、理解する。";
+  $("stageHint").textContent = "あなた専用のAI家庭教師 NEXUS";
+  $("caption").textContent = "質問を送ると、字幕がここに表示されます。";
+  $("answerSeconds").textContent = "—";
+  $("speechSeconds").textContent = "—";
+  $("answerBar").style.width = "0";
+  $("speechBar").style.width = "0";
+  $("answerBarLabel").textContent = "未計測";
+  $("speechBarLabel").textContent = "未計測";
+  $("question").value = "";
+  $("errorText").textContent = "";
+  setActivity("待機中");
+  setStatus("READY");
 }
 
 function speakText(text) {
   if (!("speechSynthesis" in window)) {
-    voiceStatusEl.textContent = "このブラウザは音声読み上げに対応していません。SafariやChromeで試してください。";
+    $("voiceStatus").textContent = "このブラウザは音声読み上げに対応していません。";
     return;
   }
-
+  const cleaned = cleanForSpeech(text);
+  if (!cleaned) {
+    showToast("読み上げる解説がありません。");
+    return;
+  }
   stopSpeech();
-  const cleaned = String(text)
-    .replace(/```[\s\S]*?```/g, "コード部分です。")
-    .replace(/https?:\/\/\S+/g, "リンク")
-    .replace(/[#*_`>|]/g, "")
-    .trim();
-
-  if (!cleaned) return;
-
-  selectedVoice = getJapaneseVoice();
+  refreshVoices();
   const utterance = new SpeechSynthesisUtterance(cleaned);
-  currentUtterance = utterance;
-  utterance.lang = selectedVoice?.lang || "ja-JP";
+  speechUtterance = utterance;
+  selectedVoice = chooseJapaneseVoice();
   if (selectedVoice) utterance.voice = selectedVoice;
-  utterance.rate = 0.95;
-  utterance.pitch = 1.0;
-  utterance.volume = 1.0;
+  utterance.lang = selectedVoice?.lang || "ja-JP";
+  utterance.rate = Number(settings.rate) || 0.95;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+  $("voiceStatus").textContent = selectedVoice
+    ? "使用音声：" + selectedVoice.name
+    : "端末の標準音声で読み上げます。";
 
   utterance.onstart = () => {
+    if (speechUtterance !== utterance) return;
     document.body.classList.add("speaking");
     setStatus("SPEAKING");
-    voiceStatusEl.textContent = "🔊 読み上げ中です。";
+    setActivity("読み上げ中");
+    $("stageTitle").textContent = "NEXUSが説明しています";
+    $("voiceStatus").textContent = "🔊 読み上げ中です。";
   };
   utterance.onboundary = event => {
-    if (currentUtterance !== utterance) return;
-    if (typeof event.charIndex === "number") {
-      captionEl.textContent = cleaned.slice(event.charIndex, event.charIndex + 75) || cleaned.slice(0, 75);
-    }
+    if (speechUtterance !== utterance) return;
+    const start = Math.max(0, event.charIndex || 0);
+    $("caption").textContent = cleaned.slice(start, start + 100);
   };
   utterance.onend = () => {
-    if (currentUtterance === utterance) {
-      currentUtterance = null;
-      document.body.classList.remove("speaking");
-      captionEl.textContent = cleaned.slice(-75);
-      setStatus(busy ? "THINKING" : "READY");
-      voiceStatusEl.textContent = "読み上げが終了しました。";
-    }
+    if (speechUtterance !== utterance) return;
+    speechUtterance = null;
+    document.body.classList.remove("speaking");
+    $("caption").textContent = cleaned.slice(-160);
+    setStatus(busy ? "THINKING" : "READY");
+    setActivity(busy ? "回答処理中" : "読み上げ完了");
+    $("voiceStatus").textContent = "読み上げが終了しました。";
   };
   utterance.onerror = event => {
-    if (currentUtterance === utterance) {
-      currentUtterance = null;
-      document.body.classList.remove("speaking");
-      setStatus(busy ? "THINKING" : "READY");
-      voiceStatusEl.textContent =
-        "音声を再生できませんでした。もう一度「この回答を読み上げる」を押してね。";
-    }
+    if (speechUtterance !== utterance) return;
+    speechUtterance = null;
+    document.body.classList.remove("speaking");
+    setStatus(busy ? "THINKING" : "READY");
+    $("voiceStatus").textContent = "読み上げを再生できませんでした。もう一度お試しください。";
   };
-
-  captionEl.textContent = cleaned.slice(0, 75);
-  // ユーザー操作から直接呼び出した場合も、回答後の自動再生も試します。
-  speechSynthesis.speak(utterance);
+  $("caption").textContent = cleaned.slice(0,100);
+  window.speechSynthesis.speak(utterance);
 }
 
-$("enableVoice").addEventListener("click", () => {
-  if (!("speechSynthesis" in window)) {
-    voiceStatusEl.textContent = "このブラウザは読み上げに対応していません。iPhoneならSafariで試してください。";
-    return;
-  }
-
-  selectedVoice = getJapaneseVoice();
-  voiceReady = true;
-  voiceStatusEl.textContent = selectedVoice
-    ? "音声を有効にしました：" + selectedVoice.name + "。質問してみてね！"
-    : "音声を有効にしました。日本語音声が見つからない場合は端末の設定を確認してね。";
-
-  // ユーザーのタップに直接結びついた短い読み上げで再生を開始します。
-  speakText("音声を有効にしました。");
-});
-
-$("stopVoice").addEventListener("click", stopSpeech);
-
-async function sendQuestion() {
-  const question = questionEl.value.trim();
+async function sendQuestion(event) {
+  if (event) event.preventDefault();
+  const question = $("question").value.trim();
   if (!question || busy) return;
 
   busy = true;
+  answerStartedAt = performance.now();
   $("send").disabled = true;
+  $("errorText").textContent = "";
   setStatus("THINKING");
-  addMessage("user", question);
-  questionEl.value = "";
-  const loading = addMessage("assistant", "考えています…");
-
+  setActivity("AIが回答を作成中");
+  document.body.classList.add("thinking");
+  $("stageTitle").textContent = "考えています…";
+  $("stageHint").textContent = "質問を読み取り、回答を作成しています。";
+  $("caption").textContent = "AIが回答を作成しています…";
+  $("answerText").textContent = "回答を生成しています…";
+  $("answerHeading").textContent = "回答を作成中";
+  const conversation = ensureConversation(question);
+  conversation.messages.push({role:"user",content:question,createdAt:Date.now()});
+  const originalQuestion = question;
+  $("question").value = "";
   const subject = $("subject").value;
   const level = $("level").value;
 
+  /*
+    Workerとの既存の通信形式を維持するため、
+    回答形式の指示をquestionに含めています。
+  */
+  const prompt =
+    "【回答形式の指示】\n" +
+    "高校生が理解しやすい日本語で回答してください。\n" +
+    "最初に結論を一文で述べ、その後に簡潔な理由や補足を説明してください。\n" +
+    "基本形式は「結論：…」「理由：…」「補足：…」です。\n" +
+    "問題の解説では、必要な計算式や手順を省略しすぎず、要点を短く説明してください。\n" +
+    "質問に直接関係しない前置きや長い挨拶は避けてください。\n\n" +
+    "【教科】" + subject + "\n" +
+    "【説明レベル】" + level + "\n" +
+    "【質問】\n" + originalQuestion;
+
   try {
     const response = await fetch(WORKER_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        question,
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        question:prompt,
         subject,
         level,
-        history: history.slice(-16)
+        history:conversation.messages.slice(-17,-1).slice(-16).map(m => ({
+          role:m.role,
+          content:m.content
+        }))
       })
     });
-
-    const data = await response.json();
+    let data;
+    try { data = await response.json(); }
+    catch { throw new Error("サーバーから正しい形式の回答が返りませんでした。"); }
     if (!response.ok || !data.answer) {
       throw new Error(data.error || "AIから回答を取得できませんでした。");
     }
 
     const answer = String(data.answer).trim();
-    loading.remove();
-    addMessage("assistant", answer, true);
+    const elapsed = (performance.now() - answerStartedAt) / 1000;
+    currentAnswer = answer;
+    renderAnswer(answer, conversation.title);
+    updateTiming(elapsed, answer);
+    $("stageTitle").textContent = "結論から、一緒に理解しよう。";
+    $("stageHint").textContent = subject + " · " + level;
+    $("caption").textContent = answer.slice(0,160);
+    setActivity("回答完了 · " + elapsed.toFixed(1) + "秒");
 
-    history.push(
-      { role: "user", content: question },
-      { role: "assistant", content: answer }
-    );
-    history = history.slice(-16);
+    conversation.messages.push({
+      role:"assistant",content:answer,seconds:elapsed,createdAt:Date.now()
+    });
+    conversation.updatedAt = Date.now();
+    conversations = conversations.filter(c => c.id !== conversation.id);
+    conversations.unshift(conversation);
+    conversations = conversations.slice(0,MAX_HISTORY);
+    saveConversations();
+    renderHistoryList();
 
-    captionEl.textContent = answer.slice(0, 75);
-
-    if (voiceReady) {
-      // 端末によっては自動再生が制限されるため、回答の手動再生ボタンも表示します。
+    if (settings.autoSpeak && voiceReady) {
       speakText(answer);
     } else {
-      voiceStatusEl.textContent = "回答しました。「音声を有効にする」を押すと読み上げを使えます。";
       setStatus("READY");
+      $("voiceStatus").textContent = "回答しました。必要なら「読み上げる」を押してください。";
     }
   } catch (error) {
-    loading.remove();
-    const message = error.message || "通信エラーが発生しました。";
-    addMessage("assistant", "ごめんね。回答を取得できませんでした。\n" + message + "\n少し待ってから、もう一度試してね。");
-    captionEl.textContent = "通信エラー：回答を取得できませんでした。";
+    const elapsed = (performance.now() - answerStartedAt) / 1000;
+    $("answerHeading").textContent = "回答を取得できませんでした";
+    $("answerText").textContent =
+      "申し訳ありません。回答を取得できませんでした。\n\n" +
+      (error.message || "通信エラーが発生しました。") +
+      "\n\n少し待ってから、もう一度試してください。";
+    $("caption").textContent = "通信エラーが発生しました。";
+    $("errorText").textContent = "通信エラー：WorkerのURLや接続状況を確認してください。";
     setStatus("ERROR");
+    setActivity("通信エラー");
+    showToast("回答を取得できませんでした。");
   } finally {
     busy = false;
     $("send").disabled = false;
-    if (!document.body.classList.contains("speaking")) {
+    document.body.classList.remove("thinking");
+    if (!document.body.classList.contains("speaking") && $("status").textContent.includes("THINKING")) {
       setStatus("READY");
     }
   }
 }
 
-$("send").addEventListener("click", sendQuestion);
-questionEl.addEventListener("keydown", event => {
-  if (event.key === "Enter" && !event.shiftKey) {
-    event.preventDefault();
-    sendQuestion();
-  }
-});
-
-$("clear").addEventListener("click", () => {
-  stopSpeech();
-  history = [];
-  messagesEl.replaceChildren();
-  addMessage("assistant", "会話をリセットしました！新しい質問をどうぞ。");
-  captionEl.textContent = "新しい会話を始めましょう。";
-  setStatus("READY");
-});
-
-$("mic").addEventListener("click", () => {
+function startVoiceInput() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
-    voiceStatusEl.textContent = "音声入力はこのブラウザでは使えません。対応ブラウザを試してください。";
+    $("voiceStatus").textContent = "このブラウザは音声入力に対応していません。質問欄に文字を入力してください。";
     return;
   }
   if (recognition) {
     recognition.stop();
     recognition = null;
-    $("mic").textContent = "🎙️ 音声入力";
+    $("mic").textContent = "🎙 音声入力";
     return;
   }
-
   recognition = new SpeechRecognition();
   recognition.lang = "ja-JP";
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
   recognition.onresult = event => {
-    questionEl.value = event.results[0][0].transcript;
+    $("question").value = event.results[0][0].transcript;
+    $("question").focus();
   };
   recognition.onerror = () => {
-    voiceStatusEl.textContent = "音声を認識できませんでした。マイクの使用許可を確認してね。";
+    $("voiceStatus").textContent = "音声を認識できませんでした。マイクの使用許可を確認してください。";
   };
   recognition.onend = () => {
     recognition = null;
-    $("mic").textContent = "🎙️ 音声入力";
+    $("mic").textContent = "🎙 音声入力";
   };
-  recognition.start();
-  $("mic").textContent = "⏹ 音声入力を停止";
+  try {
+    recognition.start();
+    $("mic").textContent = "⏹ 音声入力を停止";
+    $("voiceStatus").textContent = "話してください。";
+  } catch {
+    recognition = null;
+    $("voiceStatus").textContent = "音声入力を開始できませんでした。";
+  }
+}
+
+/* 質問と会話 */
+$("questionForm").addEventListener("submit", sendQuestion);
+$("mic").addEventListener("click", startVoiceInput);
+$("newChat").addEventListener("click", startNewConversation);
+$("scrollAnswer").addEventListener("click", () => {
+  $("answerText").scrollIntoView({behavior:"smooth",block:"start"});
+});
+$("readAnswer").addEventListener("click", () => speakText(currentAnswer));
+$("stopSpeech").addEventListener("click", stopSpeech);
+$("stopVoice").addEventListener("click", stopSpeech);
+$("copyAnswer").addEventListener("click", async () => {
+  if (!currentAnswer) return showToast("コピーする解説がありません。");
+  try {
+    await navigator.clipboard.writeText(currentAnswer);
+    showToast("解説をコピーしました。");
+  } catch {
+    const area = document.createElement("textarea");
+    area.value = currentAnswer;
+    document.body.append(area);
+    area.select();
+    const ok = document.execCommand("copy");
+    area.remove();
+    showToast(ok ? "解説をコピーしました。" : "コピーできませんでした。");
+  }
 });
 
-if (!("speechSynthesis" in window)) {
-  voiceStatusEl.textContent = "このブラウザは音声読み上げに対応していません。SafariまたはChromeで試してください。";
+/* 設定画面 */
+$("openSettings").addEventListener("click", () => {
+  refreshVoices();
+  renderHistoryList();
+  $("settingsBackdrop").classList.remove("hidden");
+});
+$("closeSettings").addEventListener("click", () => $("settingsBackdrop").classList.add("hidden"));
+$("settingsBackdrop").addEventListener("click", event => {
+  if (event.target === $("settingsBackdrop")) $("settingsBackdrop").classList.add("hidden");
+});
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") $("settingsBackdrop").classList.add("hidden");
+});
+
+$("voiceSelect").addEventListener("change", () => {
+  settings.voiceURI = $("voiceSelect").value;
+  selectedVoice = chooseJapaneseVoice();
+  saveSettings();
+});
+$("speedRange").addEventListener("input", () => {
+  settings.rate = Number($("speedRange").value);
+  $("speedValue").textContent = settings.rate.toFixed(2);
+  saveSettings();
+  if (currentAnswer) $("speechSeconds").textContent = String(estimateSpeechSeconds(currentAnswer));
+});
+$("autoSpeak").addEventListener("change", () => {
+  settings.autoSpeak = $("autoSpeak").checked;
+  saveSettings();
+});
+$("themeSelect").addEventListener("change", () => {
+  settings.theme = $("themeSelect").value;
+  applySettings();saveSettings();
+});
+$("layoutSelect").addEventListener("change", () => {
+  settings.layout = $("layoutSelect").value;
+  applySettings();saveSettings();
+});
+$("fontSelect").addEventListener("change", () => {
+  settings.font = $("fontSelect").value;
+  applySettings();saveSettings();
+});
+$("enableVoice").addEventListener("click", () => {
+  if (!("speechSynthesis" in window)) {
+    $("voiceStatus").textContent = "このブラウザは読み上げに対応していません。";
+    return;
+  }
+  voiceReady = true;
+  speakText("音声を有効にしました。質問を始めてください。");
+});
+$("testVoice").addEventListener("click", () => {
+  voiceReady = true;
+  speakText("こんにちは。NEXUSです。一緒に学習していきましょう。");
+});
+
+/* 履歴管理 */
+$("deleteHistory").addEventListener("click", () => {
+  if (!confirm("保存したすべての会話履歴を削除しますか？この操作は取り消せません。")) return;
+  conversations = [];
+  currentConversationId = null;
+  saveConversations();
+  renderHistoryList();
+  startNewConversation();
+  showToast("履歴を削除しました。");
+});
+$("exportHistory").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(conversations,null,2)],{type:"application/json;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "nexus-history.json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+/* 初期化 */
+conversations = safeLoad(STORAGE_KEY, []);
+if (!Array.isArray(conversations)) conversations = [];
+settings = {...settings,...safeLoad(SETTINGS_KEY,{})};
+applySettings();
+refreshVoices();
+if ("speechSynthesis" in window) {
+  window.speechSynthesis.onvoiceschanged = refreshVoices;
+} else {
+  $("voiceStatus").textContent = "このブラウザは音声読み上げに対応していません。";
 }
+renderHistoryList();
+setStatus("READY");
 </script>
 </body>
 </html>
