@@ -122,14 +122,19 @@ body.thinking .ring { animation-duration:2s; }
 .stage-title { font-size:clamp(17px,2vw,24px);font-weight:700;margin:0 0 8px; }
 .stage-hint { color:var(--muted);font-size:12px;line-height:1.7; }
 .caption-area {
-  width:100%;max-width:900px;
-  font-size:clamp(14px,1.5vw,18px);
-  line-height:1.9;
-  max-height:25%;
-  overflow:auto;
+  width:100%;
+  max-width:900px;
+  min-height:3.8em;
+  max-height:3.8em;
+  overflow:hidden;
   padding:0 8px;
   color:#dffaff;
+  font-size:clamp(14px,1.5vw,18px);
+  line-height:1.9;
+  white-space:pre-line;
   overflow-wrap:anywhere;
+  text-align:left;
+  transition:opacity .15s ease;
 }
 .caption-area:empty { display:none; }
 .answer-panel {
@@ -718,11 +723,24 @@ function speakText(text) {
     $("stageTitle").textContent = "NEXUSが説明しています";
     $("voiceStatus").textContent = "🔊 読み上げ中です。";
   };
-  utterance.onboundary = event => {
-    if (speechUtterance !== utterance) return;
-    const start = Math.max(0, event.charIndex || 0);
-    $("caption").textContent = cleaned.slice(start, start + 100);
-  };
+utterance.onboundary = event => {
+  if (speechUtterance !== utterance) return;
+
+  const lineLength = 24;
+  const start = Math.max(0, event.charIndex || 0);
+  const lineIndex = Math.floor(start / lineLength);
+
+  const lines = [];
+  for (let i = 0; i < 2; i++) {
+    const line = cleaned.slice(
+      (lineIndex + i) * lineLength,
+      (lineIndex + i + 1) * lineLength
+    );
+    if (line) lines.push(line);
+  }
+
+  $("caption").textContent = lines.join("\n");
+};
   utterance.onend = () => {
     if (speechUtterance !== utterance) return;
     speechUtterance = null;
