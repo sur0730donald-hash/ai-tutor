@@ -4,106 +4,135 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI TUTOR | Your Learning Partner</title>
+<title>NEXUS | Learning Intelligence</title>
 <style>
+:root{--bg:#030609;--panel:#060d14;--line:#172b38;--cyan:#43ddf8;--text:#e6f4fb;--muted:#8298a8}
 *{box-sizing:border-box}
-body{margin:0;background:#07111f;color:#eaf7ff;font-family:Arial,"Noto Sans JP",sans-serif}
-header{padding:22px 18px;border-bottom:1px solid #17364d;background:#0a1929}
-.logo{font-size:22px;font-weight:bold;letter-spacing:2px;color:#5ce1ff}
-.sub{color:#88a9bd;font-size:12px;margin-top:6px}
-main{max-width:850px;margin:auto;padding:20px}
-h1{font-size:27px;margin:12px 0}
-p{color:#a8c3d5;line-height:1.7}
-.panel{background:#0c1d30;border:1px solid #1c4058;border-radius:16px;padding:18px;margin:16px 0}
-label{display:block;color:#8edfff;font-size:13px;margin-bottom:8px}
-select,textarea,input{width:100%;padding:13px;background:#071523;border:1px solid #28516a;border-radius:10px;color:#fff;font-size:15px}
-textarea{min-height:110px;resize:vertical}
-button{border:0;border-radius:10px;padding:13px 17px;background:#39cbed;color:#041522;font-weight:bold;font-size:15px;cursor:pointer}
-button.secondary{background:#19374d;color:#dff7ff}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-#answer{white-space:pre-wrap;line-height:1.9;color:#e6f6ff}
-.small{font-size:12px;color:#7fa2b9}
-.pill{display:inline-block;padding:6px 10px;border:1px solid #27617b;border-radius:30px;color:#78e4ff;font-size:12px}
-footer{text-align:center;padding:25px;color:#63869d;font-size:12px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,"Noto Sans JP",sans-serif}
+button,select,textarea{font:inherit}
+button{cursor:pointer}
+header{height:78px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 5%;gap:20px}
+.brand{display:flex;align-items:center;gap:20px}
+.mark{font-size:30px;color:var(--cyan)}
+.brand-name{font-size:28px;letter-spacing:2px}
+.tag,.tiny{font-size:10px;letter-spacing:1px;color:var(--muted)}
+.status{font-size:12px;color:var(--cyan)}
+.layout{max-width:1250px;margin:auto;padding:28px 24px}
+.intro{display:flex;justify-content:space-between;align-items:end;gap:16px}
+h1{font-size:clamp(26px,4vw,40px);margin:15px 0}
+p{color:var(--muted);line-height:1.8}
+.eyebrow{color:var(--cyan);font-size:11px;letter-spacing:1px}
+.core-panel{margin:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 10px;display:grid;grid-template-columns:1fr 1.2fr 1fr;align-items:center;gap:20px;min-height:300px}
+.side-info{font-size:11px;color:var(--muted);line-height:2.4}
+.core-wrap{display:flex;justify-content:center;align-items:center;position:relative;min-height:250px}
+.core{width:210px;height:210px;border:1px solid #167b9c;border-radius:50%;display:grid;place-items:center;position:relative;box-shadow:0 0 35px #062d43,inset 0 0 28px #062d43;animation:pulse 4s infinite}
+.core:before,.core:after{content:"";position:absolute;border:1px solid #12516c;border-radius:50%;inset:12px}
+.core:after{inset:30px;border-color:var(--cyan)}
+.core span{font-size:65px;font-style:italic;color:var(--cyan);text-shadow:0 0 24px #23c7f0}
+@keyframes pulse{50%{box-shadow:0 0 55px #06425a,inset 0 0 35px #063047}}
+.wave{color:var(--cyan);letter-spacing:3px;text-align:center;margin-top:10px}
+.section-title{font-size:19px;margin:28px 0 14px}
+.tabs,.examples,.actions{display:flex;gap:9px;flex-wrap:wrap}
+.tab,.example,.secondary{background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:7px;padding:10px 14px}
+.tab.active,.tab:hover{color:var(--cyan);border-color:var(--cyan)}
+.example:hover,.secondary:hover{border-color:var(--cyan);color:var(--cyan)}
+.workspace{margin-top:20px;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:20px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{display:block;font-size:12px;color:var(--cyan);margin-bottom:9px}
+select,textarea{width:100%;background:#03080d;color:var(--text);border:1px solid #1b3949;border-radius:8px;padding:13px;outline:none}
+select:focus,textarea:focus{border-color:var(--cyan)}
+textarea{min-height:115px;resize:vertical}
+.ask-row{display:flex;gap:10px;margin-top:14px}
+.ask-row button{background:var(--cyan);color:#031018;border:0;border-radius:8px;padding:13px 20px;font-weight:bold}
+.ask-row .secondary{background:transparent;color:var(--muted);border:1px solid var(--line)}
+#answer{white-space:pre-wrap;line-height:1.9;overflow-wrap:anywhere}
+#answer:empty:before{content:"ここにAIの解説が表示されます。";color:var(--muted)}
+#visual{display:none;border:1px solid var(--line);padding:18px;border-radius:8px;margin-top:14px;color:var(--cyan);white-space:pre-wrap}
+.note{font-size:11px;color:var(--muted)}
+footer{border-top:1px solid var(--line);margin-top:36px;padding:22px 0;display:flex;justify-content:space-between;gap:12px;font-size:10px;color:var(--muted)}
+@media(max-width:700px){header{padding:0 16px}.brand-name{font-size:22px}.tag{display:none}.layout{padding:20px 14px}.core-panel{grid-template-columns:1fr;gap:8px}.side-info{display:flex;justify-content:space-between}.core-wrap{min-height:220px}.core{width:180px;height:180px}.row{grid-template-columns:1fr}.intro{align-items:start;flex-direction:column}.ask-row{flex-wrap:wrap}.ask-row button{flex:1}}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">✦ AI TUTOR</div>
-  <div class="sub">YOUR PERSONAL LEARNING PARTNER</div>
+  <div class="brand"><div class="mark">N′</div><div class="brand-name">NEXUS</div><div class="tag">LEARNING INTELLIGENCE</div></div>
+  <div class="status">● AI INTERFACE</div>
 </header>
-<main>
-  <span class="pill">HIGH SCHOOL LEARNING</span>
-  <h1>わからないを、わかるに。</h1>
-  <p>質問して、考えて、理解する。あなたの学習をサポートするAI家庭教師。</p>
+<main class="layout">
+  <div class="intro">
+    <div><div class="eyebrow">▪ YOUR PERSONAL LEARNING SPACE</div><h1>学びの、その先へ。</h1><p>気になることから、理解の一歩先へ。</p></div>
+    <div class="tiny">WORKSPACE　01</div>
+  </div>
 
-  <section class="panel">
-    <label for="subject">学習する教科</label>
-    <select id="subject">
-      <option>数学</option>
-      <option>英語</option>
-      <option>日本史</option>
-      <option>地理</option>
-      <option>化学</option>
-      <option>国語・古典</option>
-      <option>情報</option>
-      <option>その他</option>
-    </select>
-    <br><br>
-    <label for="level">学習レベル</label>
-    <select id="level">
-      <option>高校1年生</option>
-      <option>高校2年生</option>
-      <option>高校3年生</option>
-      <option>基礎から学びたい</option>
-    </select>
+  <section class="core-panel">
+    <div class="side-info">NEXUS CORE<br>NEURAL INTERFACE<br>VISUAL / ACTIVE</div>
+    <div><div class="core-wrap"><div class="core"><span>N′</span></div></div><div class="wave">▂ ▄ ▆ ▇ ▄ ▆ ▇ ▃</div></div>
+    <div class="side-info">SESSION STATUS<br><strong id="session">STANDBY</strong><br><span id="connection">AI READY</span></div>
   </section>
 
-  <section class="panel">
-    <label for="question">質問や問題を入力</label>
-    <textarea id="question" placeholder="例：導関数を使って極大値と極小値を求める方法を教えて！"></textarea>
-    <div class="actions">
-      <button onclick="askTutor()">質問する ↗</button>
-      <button class="secondary" onclick="clearQuestion()">クリア</button>
+  <div class="eyebrow">01 — READY FOR YOUR QUESTION</div>
+  <h2 class="section-title">今日は、何を一緒に学ぼう？</h2>
+
+  <section class="workspace">
+    <div class="row">
+      <div><label for="subject">学習する教科</label><select id="subject"><option>数学</option><option>英語</option><option>国語・古典</option><option>日本史</option><option>地理</option><option>化学</option><option>情報</option><option>その他</option></select></div>
+      <div><label for="level">学習レベル</label><select id="level"><option>高校1年生</option><option>高校2年生</option><option>高校3年生</option><option>基礎から学びたい</option></select></div>
     </div>
-    <p class="small">※ 現在は画面の試作段階です。AIモデル接続後に実際の回答が生成されます。</p>
-  </section>
-
-  <section class="panel">
-    <label>✦ TUTOR RESPONSE</label>
-    <div id="answer">こんにちは！何がわからないか、気軽に質問してね。
-
-教科を選んで質問を入力すると、ここに表示されます。</div>
-    <div class="actions">
-      <button class="secondary" onclick="speakAnswer()">🔊 読み上げ</button>
-      <button class="secondary" onclick="stopSpeech()">停止</button>
+    <div style="margin-top:18px"><label for="question">質問や問題</label><textarea id="question" placeholder="例：二次関数の最大値と最小値をわかりやすく教えて！"></textarea></div>
+    <div class="examples" style="margin-top:10px">
+      <button class="example" onclick="fillExample('二次関数の最大値と最小値を教えて')">∑ 数学を理解したい</button>
+      <button class="example" onclick="fillExample('光合成のしくみを高校生向けに教えて')">⚗ 化学を理解したい</button>
+      <button class="example" onclick="fillExample('英文法の現在完了を例文付きで教えて')">▤ 英文法を整理したい</button>
     </div>
+    <div class="ask-row"><button id="ask" onclick="askTutor()">AIに質問する ↗</button><button class="secondary" onclick="clearAll()">クリア</button><button class="secondary" onclick="startVoice()">🎙 音声入力</button></div>
+    <p class="note">質問はCloudflareのAIへ送信されます。個人情報やパスワードは入力しないでください。</p>
   </section>
-  <footer>AI TUTOR · LEARN AT YOUR OWN PACE</footer>
+
+  <section class="workspace">
+    <div class="eyebrow">✦ NEXUS RESPONSE</div>
+    <h2 class="section-title">AIの解説</h2>
+    <div id="answer" aria-live="polite">こんにちは！教科を選んで、気軽に質問してね。</div>
+    <div id="visual"></div>
+    <div class="actions" style="margin-top:16px"><button class="secondary" onclick="speakAnswer()">🔊 読み上げ</button><button class="secondary" onclick="stopSpeech()">■ 停止</button></div>
+  </section>
+  <footer><span>DESIGNED FOR YOUR CURIOSITY</span><span>NEXUS / LEARN BEYOND</span></footer>
 </main>
 <script>
-function askTutor(){
-  const q=document.getElementById('question').value.trim();
-  const s=document.getElementById('subject').value;
-  if(!q){document.getElementById('answer').textContent='質問を入力してね！';return;}
-  document.getElementById('answer').textContent=
-    '選択した教科：'+s+'\n\n質問：'+q+
-    '\n\n現在、AIモデルはまだ接続されていません。これは画面の動作確認用です。本物のAIを接続すると、ここで解説を生成できるようになります。';
-}
-function clearQuestion(){
-  document.getElementById('question').value='';
-  document.getElementById('answer').textContent='質問を入力してね！';
+const WORKER_URL = "https://autumn-dawn-0525.sur0730donald.workers.dev/";
+
+function fillExample(text){document.getElementById("question").value=text;document.getElementById("question").focus();}
+function clearAll(){document.getElementById("question").value="";document.getElementById("answer").textContent="質問を入力してね！";document.getElementById("visual").style.display="none";}
+async function askTutor(){
+  const question=document.getElementById("question").value.trim();
+  const subject=document.getElementById("subject").value;
+  const level=document.getElementById("level").value;
+  const answer=document.getElementById("answer");
+  const button=document.getElementById("ask");
+  const session=document.getElementById("session");
+  if(!question){answer.textContent="質問を入力してね！";return;}
+  button.disabled=true;button.textContent="考え中…";session.textContent="PROCESSING";
+  answer.textContent="NEXUSが解説を準備しています…";document.getElementById("visual").style.display="none";
+  try{
+    const response=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question,subject,level})});
+    const data=await response.json();
+    if(!response.ok)throw new Error(data.error||"通信エラー");
+    answer.textContent=data.answer||"回答を受け取れませんでした。";
+    session.textContent="RESPONSE READY";
+  }catch(error){
+    answer.textContent="接続できませんでした。\nCloudflare Workerのデプロイ状態とログを確認してね。\n詳細："+error.message;
+    session.textContent="CONNECTION ERROR";
+  }finally{button.disabled=false;button.textContent="AIに質問する ↗";}
 }
 function speakAnswer(){
-  if(!('speechSynthesis' in window)){
-    alert('このブラウザでは音声読み上げを利用できません。');return;
-  }
-  speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(document.getElementById('answer').textContent);
-  u.lang='ja-JP';
-  speechSynthesis.speak(u);
+  if(!("speechSynthesis" in window)){alert("このブラウザでは読み上げに対応していません。");return;}
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(document.getElementById("answer").textContent);u.lang="ja-JP";speechSynthesis.speak(u);
 }
-function stopSpeech(){if('speechSynthesis' in window)speechSynthesis.cancel();}
+function stopSpeech(){if("speechSynthesis" in window)speechSynthesis.cancel();}
+function startVoice(){
+  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SpeechRecognition){alert("このブラウザでは音声入力に対応していません。質問欄に入力してね。");return;}
+  const recognition=new SpeechRecognition();recognition.lang="ja-JP";recognition.onresult=e=>{document.getElementById("question").value=e.results[0][0].transcript;};recognition.onerror=()=>alert("音声を認識できませんでした。もう一度試してね。");recognition.start();
+}
 </script>
 </body>
 </html>
