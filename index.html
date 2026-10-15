@@ -3,136 +3,774 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NEXUS | Learning Intelligence</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS | AI家庭教師</title>
 <style>
-:root{--bg:#030609;--panel:#060d14;--line:#172b38;--cyan:#43ddf8;--text:#e6f4fb;--muted:#8298a8}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,"Noto Sans JP",sans-serif}
-button,select,textarea{font:inherit}
-button{cursor:pointer}
-header{height:78px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 5%;gap:20px}
-.brand{display:flex;align-items:center;gap:20px}
-.mark{font-size:30px;color:var(--cyan)}
-.brand-name{font-size:28px;letter-spacing:2px}
-.tag,.tiny{font-size:10px;letter-spacing:1px;color:var(--muted)}
-.status{font-size:12px;color:var(--cyan)}
-.layout{max-width:1250px;margin:auto;padding:28px 24px}
-.intro{display:flex;justify-content:space-between;align-items:end;gap:16px}
-h1{font-size:clamp(26px,4vw,40px);margin:15px 0}
-p{color:var(--muted);line-height:1.8}
-.eyebrow{color:var(--cyan);font-size:11px;letter-spacing:1px}
-.core-panel{margin:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 10px;display:grid;grid-template-columns:1fr 1.2fr 1fr;align-items:center;gap:20px;min-height:300px}
-.side-info{font-size:11px;color:var(--muted);line-height:2.4}
-.core-wrap{display:flex;justify-content:center;align-items:center;position:relative;min-height:250px}
-.core{width:210px;height:210px;border:1px solid #167b9c;border-radius:50%;display:grid;place-items:center;position:relative;box-shadow:0 0 35px #062d43,inset 0 0 28px #062d43;animation:pulse 4s infinite}
-.core:before,.core:after{content:"";position:absolute;border:1px solid #12516c;border-radius:50%;inset:12px}
-.core:after{inset:30px;border-color:var(--cyan)}
-.core span{font-size:65px;font-style:italic;color:var(--cyan);text-shadow:0 0 24px #23c7f0}
-@keyframes pulse{50%{box-shadow:0 0 55px #06425a,inset 0 0 35px #063047}}
-.wave{color:var(--cyan);letter-spacing:3px;text-align:center;margin-top:10px}
-.section-title{font-size:19px;margin:28px 0 14px}
-.tabs,.examples,.actions{display:flex;gap:9px;flex-wrap:wrap}
-.tab,.example,.secondary{background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:7px;padding:10px 14px}
-.tab.active,.tab:hover{color:var(--cyan);border-color:var(--cyan)}
-.example:hover,.secondary:hover{border-color:var(--cyan);color:var(--cyan)}
-.workspace{margin-top:20px;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:20px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-label{display:block;font-size:12px;color:var(--cyan);margin-bottom:9px}
-select,textarea{width:100%;background:#03080d;color:var(--text);border:1px solid #1b3949;border-radius:8px;padding:13px;outline:none}
-select:focus,textarea:focus{border-color:var(--cyan)}
-textarea{min-height:115px;resize:vertical}
-.ask-row{display:flex;gap:10px;margin-top:14px}
-.ask-row button{background:var(--cyan);color:#031018;border:0;border-radius:8px;padding:13px 20px;font-weight:bold}
-.ask-row .secondary{background:transparent;color:var(--muted);border:1px solid var(--line)}
-#answer{white-space:pre-wrap;line-height:1.9;overflow-wrap:anywhere}
-#answer:empty:before{content:"ここにAIの解説が表示されます。";color:var(--muted)}
-#visual{display:none;border:1px solid var(--line);padding:18px;border-radius:8px;margin-top:14px;color:var(--cyan);white-space:pre-wrap}
-.note{font-size:11px;color:var(--muted)}
-footer{border-top:1px solid var(--line);margin-top:36px;padding:22px 0;display:flex;justify-content:space-between;gap:12px;font-size:10px;color:var(--muted)}
-@media(max-width:700px){header{padding:0 16px}.brand-name{font-size:22px}.tag{display:none}.layout{padding:20px 14px}.core-panel{grid-template-columns:1fr;gap:8px}.side-info{display:flex;justify-content:space-between}.core-wrap{min-height:220px}.core{width:180px;height:180px}.row{grid-template-columns:1fr}.intro{align-items:start;flex-direction:column}.ask-row{flex-wrap:wrap}.ask-row button{flex:1}}
+:root {
+  --bg: #050910;
+  --panel: rgba(12, 23, 39, .88);
+  --cyan: #5cecff;
+  --blue: #368aff;
+  --text: #eaf8ff;
+  --muted: #8aa6bd;
+  --line: rgba(92, 236, 255, .2);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 50% 15%, #102b46 0%, transparent 42%),
+    radial-gradient(ellipse at 80% 75%, #101c36 0%, transparent 45%),
+    var(--bg);
+  color: var(--text);
+  font-family: "Yu Gothic UI", "Meiryo", sans-serif;
+}
+button, select, textarea { font: inherit; }
+button { cursor: pointer; }
+.app {
+  width: min(100% - 28px, 920px);
+  margin: auto;
+  padding: 24px 0 44px;
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--line);
+  padding: 0 0 16px;
+}
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 5px;
+  color: var(--cyan);
+  text-shadow: 0 0 20px #24cfff66;
+}
+.status {
+  color: var(--cyan);
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+.hero {
+  text-align: center;
+  padding: 30px 0 20px;
+}
+.core-wrap {
+  position: relative;
+  width: 230px;
+  height: 230px;
+  margin: 0 auto 8px;
+  display: grid;
+  place-items: center;
+}
+.core {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+  background:
+    radial-gradient(circle at 35% 28%, white 0%, #a9f8ff 7%, #37dfff 22%, #1174c9 48%, #07162f 75%);
+  box-shadow:
+    0 0 20px #36dfff,
+    0 0 55px #168dff99,
+    0 0 95px #168dff44,
+    inset -10px -12px 28px #030917;
+  animation: coreFloat 3.5s ease-in-out infinite, corePulse 2.8s ease-in-out infinite;
+}
+.core::before, .core::after {
+  content: "";
+  position: absolute;
+  inset: 13px;
+  border-radius: 50%;
+  border: 1px solid #c6fbff99;
+  box-shadow: inset 0 0 18px #5cecff66;
+}
+.core::after {
+  inset: 27px;
+  background: #9af7ff30;
+  filter: blur(2px);
+}
+.ring {
+  position: absolute;
+  width: 175px;
+  height: 175px;
+  border: 1px solid #55eaff99;
+  border-radius: 50%;
+  box-shadow: 0 0 16px #21d8ff22, inset 0 0 15px #21d8ff12;
+}
+.ring-one { transform: rotateX(68deg) rotateZ(0deg); animation: orbitOne 7s linear infinite; }
+.ring-two { width: 205px; height: 205px; border-color: #428dff88; transform: rotateX(68deg) rotateZ(55deg); animation: orbitTwo 10s linear infinite; }
+.ring-three { width: 155px; height: 155px; border-style: dashed; border-color: #91f5ff77; animation: orbitThree 16s linear infinite; }
+.orbit-dot {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 14px 4px var(--cyan);
+  top: 22px;
+  left: 50%;
+}
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 12px var(--cyan);
+  animation: particleFloat 3s ease-in-out infinite alternate;
+}
+.p1 { top: 25px; left: 42px; }
+.p2 { right: 27px; top: 72px; animation-delay: -1s; }
+.p3 { left: 43px; bottom: 44px; animation-delay: -2s; }
+.p4 { right: 42px; bottom: 32px; animation-delay: -.6s; }
+.p5 { top: 45px; right: 52px; animation-delay: -1.4s; }
+.hero h1 {
+  margin: 0;
+  font-size: clamp(25px, 5vw, 36px);
+  letter-spacing: 3px;
+}
+.hero h1 span { color: var(--cyan); }
+.tagline { color: var(--muted); font-size: 13px; margin-top: 10px; }
+#session {
+  margin: 14px 0 0;
+  color: var(--cyan);
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+.subtitle-box {
+  width: min(100%, 580px);
+  min-height: 70px;
+  margin: 18px auto 0;
+  padding: 14px 18px;
+  border: 1px solid #55eaff55;
+  border-radius: 14px;
+  background: linear-gradient(120deg, #0b1a2cdd, #10263ddd);
+  box-shadow: 0 0 30px #18bfff12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#subtitle {
+  color: #e9fdff;
+  font-size: clamp(15px, 2.6vw, 18px);
+  line-height: 1.8;
+  text-align: center;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+#subtitle:empty::before {
+  content: "ここにAIの話している内容が表示されます";
+  color: #6e91aa;
+  font-size: 13px;
+}
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 20px;
+  margin-top: 18px;
+  box-shadow: 0 12px 40px #0003;
+  backdrop-filter: blur(10px);
+}
+.panel-title {
+  color: var(--cyan);
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin: 0 0 14px;
+}
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+select, textarea {
+  width: 100%;
+  border: 1px solid #29465e;
+  background: #07111f;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 12px;
+  outline: none;
+}
+select:focus, textarea:focus { border-color: var(--cyan); }
+textarea { resize: vertical; min-height: 110px; line-height: 1.7; }
+.question-area { margin-top: 16px; }
+.examples { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.example {
+  background: #0b1b2b;
+  color: #a8d8ee;
+  border: 1px solid #25445d;
+  border-radius: 20px;
+  padding: 7px 11px;
+  font-size: 12px;
+}
+.example:hover { border-color: var(--cyan); color: white; }
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+.primary, .secondary {
+  border-radius: 10px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  transition: .2s;
+}
+.primary {
+  flex: 1;
+  color: #04111b;
+  font-weight: 800;
+  background: linear-gradient(100deg, #64f2ff, #6caaff);
+  border: none;
+  box-shadow: 0 0 22px #32dfff25;
+}
+.primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.primary:disabled { opacity: .55; cursor: wait; transform: none; }
+.secondary { background: #0a1827; color: #bcefff; }
+.secondary:hover { border-color: var(--cyan); }
+.answer {
+  white-space: pre-wrap;
+  line-height: 1.95;
+  overflow-wrap: anywhere;
+  color: #dceefa;
+  font-size: 15px;
+}
+.answer:empty::before { content: "ここにAIの詳しい回答が表示されます。"; color: #6e8ba1; }
+.answer-tools { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.visual-card {
+  display: none;
+  overflow: hidden;
+}
+.visual-card.visible { display: block; }
+#visualTitle { font-size: 15px; color: var(--cyan); margin: 0 0 8px; }
+#visualDescription { color: var(--muted); font-size: 13px; line-height: 1.7; }
+.diagram {
+  width: 100%;
+  max-height: 310px;
+  display: block;
+  margin: 10px auto;
+}
+.diagram text { fill: #d9faff; font-size: 12px; }
+.diagram .gridline { stroke: #254158; stroke-width: 1; }
+.diagram .axis { stroke: #91bfd8; stroke-width: 1.5; }
+.diagram .glowline { stroke: #5cecff; stroke-width: 3; fill: none; filter: drop-shadow(0 0 4px #25cfff); }
+.diagram .node { fill: #102e45; stroke: #5cecff; stroke-width: 1.5; }
+.footer { text-align: center; color: #58758c; font-size: 11px; margin-top: 24px; }
+@keyframes orbitOne { from { transform: rotateX(68deg) rotateZ(0deg); } to { transform: rotateX(68deg) rotateZ(360deg); } }
+@keyframes orbitTwo { from { transform: rotateX(68deg) rotateZ(55deg); } to { transform: rotateX(68deg) rotateZ(415deg); } }
+@keyframes orbitThree { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes coreFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes corePulse { 0%,100% { box-shadow: 0 0 20px #36dfff, 0 0 55px #168dff99, 0 0 95px #168dff44, inset -10px -12px 28px #030917; } 50% { box-shadow: 0 0 28px #36dfff, 0 0 70px #168dffbb, 0 0 115px #168dff55, inset -10px -12px 28px #030917; } }
+@keyframes particleFloat { from { transform: translate(0,0); opacity: .35; } to { transform: translate(5px,-10px); opacity: 1; } }
+body.thinking .core { animation-duration: 1.2s, 1s; }
+body.speaking .core { animation-duration: 1.6s, 1.2s; }
+body.speaking .ring-one { animation-duration: 2.5s; }
+body.speaking .ring-two { animation-duration: 3.5s; }
+@media (max-width: 560px) {
+  .app { width: min(100% - 20px, 920px); padding-top: 15px; }
+  .hero { padding-top: 22px; }
+  .core-wrap { width: 200px; height: 200px; transform: scale(.92); margin-bottom: -2px; }
+  .fields { grid-template-columns: 1fr; }
+  .panel { padding: 15px; }
+  .actions button { min-width: 100%; }
+  .answer-tools button { flex: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+}
 </style>
 </head>
 <body>
-<header>
-  <div class="brand"><div class="mark">N′</div><div class="brand-name">NEXUS</div><div class="tag">LEARNING INTELLIGENCE</div></div>
-  <div class="status">● AI INTERFACE</div>
-</header>
-<main class="layout">
-  <div class="intro">
-    <div><div class="eyebrow">▪ YOUR PERSONAL LEARNING SPACE</div><h1>学びの、その先へ。</h1><p>気になることから、理解の一歩先へ。</p></div>
-    <div class="tiny">WORKSPACE　01</div>
-  </div>
+<div class="app">
+  <header>
+    <div class="logo">NEXUS</div>
+    <div class="status">AI LEARNING SYSTEM</div>
+  </header>
 
-  <section class="core-panel">
-    <div class="side-info">NEXUS CORE<br>NEURAL INTERFACE<br>VISUAL / ACTIVE</div>
-    <div><div class="core-wrap"><div class="core"><span>N′</span></div></div><div class="wave">▂ ▄ ▆ ▇ ▄ ▆ ▇ ▃</div></div>
-    <div class="side-info">SESSION STATUS<br><strong id="session">STANDBY</strong><br><span id="connection">AI READY</span></div>
-  </section>
-
-  <div class="eyebrow">01 — READY FOR YOUR QUESTION</div>
-  <h2 class="section-title">今日は、何を一緒に学ぼう？</h2>
-
-  <section class="workspace">
-    <div class="row">
-      <div><label for="subject">学習する教科</label><select id="subject"><option>数学</option><option>英語</option><option>国語・古典</option><option>日本史</option><option>地理</option><option>化学</option><option>情報</option><option>その他</option></select></div>
-      <div><label for="level">学習レベル</label><select id="level"><option>高校1年生</option><option>高校2年生</option><option>高校3年生</option><option>基礎から学びたい</option></select></div>
+  <section class="hero">
+    <div class="core-wrap" id="coreWrap" aria-label="NEXUS AIコア">
+      <div class="ring ring-one"><span class="orbit-dot"></span></div>
+      <div class="ring ring-two"><span class="orbit-dot"></span></div>
+      <div class="ring ring-three"></div>
+      <span class="particle p1"></span>
+      <span class="particle p2"></span>
+      <span class="particle p3"></span>
+      <span class="particle p4"></span>
+      <span class="particle p5"></span>
+      <div class="core"></div>
     </div>
-    <div style="margin-top:18px"><label for="question">質問や問題</label><textarea id="question" placeholder="例：二次関数の最大値と最小値をわかりやすく教えて！"></textarea></div>
-    <div class="examples" style="margin-top:10px">
-      <button class="example" onclick="fillExample('二次関数の最大値と最小値を教えて')">∑ 数学を理解したい</button>
-      <button class="example" onclick="fillExample('光合成のしくみを高校生向けに教えて')">⚗ 化学を理解したい</button>
-      <button class="example" onclick="fillExample('英文法の現在完了を例文付きで教えて')">▤ 英文法を整理したい</button>
+    <h1>学びを、<span>進化</span>させる。</h1>
+    <div class="tagline">あなたに寄り添う、AI家庭教師。</div>
+    <div id="session" aria-live="polite">SYSTEM READY</div>
+    <div class="subtitle-box">
+      <div id="subtitle" aria-live="polite" aria-atomic="true"></div>
     </div>
-    <div class="ask-row"><button id="ask" onclick="askTutor()">AIに質問する ↗</button><button class="secondary" onclick="clearAll()">クリア</button><button class="secondary" onclick="startVoice()">🎙 音声入力</button></div>
-    <p class="note">質問はCloudflareのAIへ送信されます。個人情報やパスワードは入力しないでください。</p>
   </section>
 
-  <section class="workspace">
-    <div class="eyebrow">✦ NEXUS RESPONSE</div>
-    <h2 class="section-title">AIの解説</h2>
-    <div id="answer" aria-live="polite">こんにちは！教科を選んで、気軽に質問してね。</div>
-    <div id="visual"></div>
-    <div class="actions" style="margin-top:16px"><button class="secondary" onclick="speakAnswer()">🔊 読み上げ</button><button class="secondary" onclick="stopSpeech()">■ 停止</button></div>
+  <section class="panel">
+    <h2 class="panel-title">01 / LEARNING SETTINGS</h2>
+    <div class="fields">
+      <div>
+        <label for="subject">教科</label>
+        <select id="subject">
+          <option>その他</option>
+          <option>数学</option>
+          <option>数学I</option>
+          <option>数学A</option>
+          <option>数学II</option>
+          <option>数学B</option>
+          <option>数学C</option>
+          <option>英語</option>
+          <option>英語コミュニケーション</option>
+          <option>論理・表現</option>
+          <option>現代文</option>
+          <option>論理国語</option>
+          <option>古典</option>
+          <option>化学</option>
+          <option>物理</option>
+          <option>生物</option>
+          <option>地学</option>
+          <option>日本史</option>
+          <option>世界史</option>
+          <option>地理</option>
+          <option>公共</option>
+          <option>情報</option>
+        </select>
+      </div>
+      <div>
+        <label for="level">学習レベル</label>
+        <select id="level">
+          <option>高校1年生</option>
+          <option>高校2年生</option>
+          <option>高校3年生</option>
+          <option>基礎から</option>
+          <option>入試対策</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="question-area">
+      <label for="question">質問・解いてほしい問題</label>
+      <textarea id="question" placeholder="わからない問題を入力してね。音声でも質問できるよ。"></textarea>
+      <div class="examples">
+        <button class="example" type="button" onclick="setExample('二次関数の最大値と最小値を教えて')">数学：最大値・最小値</button>
+        <button class="example" type="button" onclick="setExample('光合成の仕組みをわかりやすく説明して')">理科：光合成</button>
+        <button class="example" type="button" onclick="setExample('平安時代に浄土教が広まった理由を教えて')">日本史：浄土教</button>
+      </div>
+      <div class="actions">
+        <button id="askButton" class="primary" type="button" onclick="askTutor()">AIに質問する ↗</button>
+        <button class="secondary" type="button" onclick="startVoice()">🎙️ 話して質問</button>
+        <button class="secondary" type="button" onclick="clearQuestion()">クリア</button>
+      </div>
+    </div>
   </section>
-  <footer><span>DESIGNED FOR YOUR CURIOSITY</span><span>NEXUS / LEARN BEYOND</span></footer>
-</main>
+
+  <section class="panel">
+    <h2 class="panel-title">02 / AI EXPLANATION</h2>
+    <div id="answer" class="answer" aria-live="polite"></div>
+    <div class="answer-tools">
+      <button class="secondary" type="button" onclick="speakAnswer()">🔊 読み上げる</button>
+      <button class="secondary" type="button" onclick="stopSpeech()">■ 停止</button>
+    </div>
+  </section>
+
+  <section id="visualCard" class="panel visual-card">
+    <h2 class="panel-title">03 / VISUAL LEARNING</h2>
+    <h3 id="visualTitle">学習図解</h3>
+    <div id="visualArea"></div>
+    <div id="visualDescription"></div>
+  </section>
+
+  <div class="footer">NEXUS · YOUR PERSONAL AI TUTOR</div>
+</div>
+
 <script>
+"use strict";
+
+// Cloudflare Worker
 const WORKER_URL = "https://autumn-dawn-0525.sur0730donald.workers.dev/";
 
-function fillExample(text){document.getElementById("question").value=text;document.getElementById("question").focus();}
-function clearAll(){document.getElementById("question").value="";document.getElementById("answer").textContent="質問を入力してね！";document.getElementById("visual").style.display="none";}
-async function askTutor(){
-  const question=document.getElementById("question").value.trim();
-  const subject=document.getElementById("subject").value;
-  const level=document.getElementById("level").value;
-  const answer=document.getElementById("answer");
-  const button=document.getElementById("ask");
-  const session=document.getElementById("session");
-  if(!question){answer.textContent="質問を入力してね！";return;}
-  button.disabled=true;button.textContent="考え中…";session.textContent="PROCESSING";
-  answer.textContent="NEXUSが解説を準備しています…";document.getElementById("visual").style.display="none";
-  try{
-    const response=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question,subject,level})});
-    const data=await response.json();
-    if(!response.ok)throw new Error(data.error||"通信エラー");
-    answer.textContent=data.answer||"回答を受け取れませんでした。";
-    session.textContent="RESPONSE READY";
-  }catch(error){
-    answer.textContent="接続できませんでした。\nCloudflare Workerのデプロイ状態とログを確認してね。\n詳細："+error.message;
-    session.textContent="CONNECTION ERROR";
-  }finally{button.disabled=false;button.textContent="AIに質問する ↗";}
+const $ = id => document.getElementById(id);
+let currentAnswer = "";
+let speechChunks = [];
+let speechIndex = 0;
+let currentUtterance = null;
+let isSpeaking = false;
+let speechRunId = 0;
+let availableVoices = [];
+let voiceLoadAttempts = 0;
+
+if ("speechSynthesis" in window) {
+  availableVoices = speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = () => {
+    availableVoices = speechSynthesis.getVoices();
+  };
 }
-function speakAnswer(){
-  if(!("speechSynthesis" in window)){alert("このブラウザでは読み上げに対応していません。");return;}
-  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(document.getElementById("answer").textContent);u.lang="ja-JP";speechSynthesis.speak(u);
+
+function setSession(text) {
+  $("session").textContent = text;
 }
-function stopSpeech(){if("speechSynthesis" in window)speechSynthesis.cancel();}
-function startVoice(){
-  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SpeechRecognition){alert("このブラウザでは音声入力に対応していません。質問欄に入力してね。");return;}
-  const recognition=new SpeechRecognition();recognition.lang="ja-JP";recognition.onresult=e=>{document.getElementById("question").value=e.results[0][0].transcript;};recognition.onerror=()=>alert("音声を認識できませんでした。もう一度試してね。");recognition.start();
+
+function setExample(text) {
+  $("question").value = text;
+  $("question").focus();
 }
+
+function clearQuestion() {
+  $("question").value = "";
+  $("answer").textContent = "";
+  currentAnswer = "";
+  hideDiagram();
+  stopSpeech();
+  setSession("SYSTEM READY");
+}
+
+async function askTutor() {
+  const question = $("question").value.trim();
+  if (!question) {
+    $("question").focus();
+    setSession("質問を入力してください");
+    return;
+  }
+
+  stopSpeech();
+  $("answer").textContent = "";
+  currentAnswer = "";
+  hideDiagram();
+
+  const button = $("askButton");
+  button.disabled = true;
+  button.textContent = "考えています…";
+  document.body.classList.add("thinking");
+  setSession("THINKING…");
+
+  try {
+    const response = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question,
+        subject: $("subject").value,
+        level: $("level").value
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "AIへの接続に失敗しました。");
+    }
+
+    if (!data.answer) {
+      throw new Error("AIから回答が返ってきませんでした。");
+    }
+
+    currentAnswer = String(data.answer).trim();
+    $("answer").textContent = currentAnswer;
+
+    // 問題に合う図解がある場合だけ表示する
+    renderDiagramIfUseful(question, currentAnswer, $("subject").value);
+
+    setSession("ANSWER READY · SPEAKING");
+    // ユーザーが質問ボタンを押した流れで自動読み上げ
+    speakAnswer();
+
+  } catch (error) {
+    $("answer").textContent =
+      "接続できませんでした。\n" +
+      "Cloudflare Workerのデプロイ状態とログを確認してね。\n" +
+      "詳細：" + (error.message || "不明なエラー");
+    setSession("CONNECTION ERROR");
+  } finally {
+    document.body.classList.remove("thinking");
+    button.disabled = false;
+    button.textContent = "AIに質問する ↗";
+  }
+}
+
+// 音声用に文章を短いまとまりへ分割
+function splitAnswerIntoChunks(text) {
+  const sentences = text
+    .replace(/\r/g, "")
+    .split(/(?<=[。！？!?])\s*|\n+/)
+    .map(s => s.trim())
+    .filter(Boolean);
+
+  const chunks = [];
+
+  for (const sentence of sentences) {
+    let remaining = sentence;
+
+    while (remaining.length > 48) {
+      let cut = -1;
+      const searchLimit = Math.min(remaining.length, 42);
+
+      for (let i = searchLimit; i >= 20; i--) {
+        if ("、，；：".includes(remaining[i])) {
+          cut = i + 1;
+          break;
+        }
+      }
+
+      if (cut < 0) cut = 34;
+
+      chunks.push(remaining.slice(0, cut).trim());
+      remaining = remaining.slice(cut).trim();
+    }
+
+    if (remaining) chunks.push(remaining);
+  }
+
+  return chunks;
+}
+
+function showSubtitle(text) {
+  $("subtitle").textContent = text;
+}
+
+function speakAnswer() {
+  if (!("speechSynthesis" in window)) {
+    setSession("このブラウザは音声読み上げに未対応です");
+    return;
+  }
+
+  const text = currentAnswer || $("answer").textContent.trim();
+  if (!text) return;
+
+  stopSpeech();
+
+  speechRunId++;
+  const thisRun = speechRunId;
+  speechChunks = splitAnswerIntoChunks(text);
+  speechIndex = 0;
+  isSpeaking = true;
+
+  document.body.classList.add("speaking");
+  setSession("SPEAKING · NEXUS");
+  showSubtitle("");
+
+  speakNextChunk(thisRun);
+}
+
+function speakNextChunk(thisRun) {
+  if (!isSpeaking || thisRun !== speechRunId) return;
+
+  if (speechIndex >= speechChunks.length) {
+    isSpeaking = false;
+    document.body.classList.remove("speaking");
+    setSession("SYSTEM READY");
+    showSubtitle("");
+    return;
+  }
+
+  const chunk = speechChunks[speechIndex];
+  showSubtitle(chunk);
+
+  // 字幕の内容に応じて、図解を段階的に切り替える
+  updateDiagramStage(chunk);
+
+  currentUtterance = new SpeechSynthesisUtterance(chunk);
+  currentUtterance.lang = "ja-JP";
+  currentUtterance.rate = 0.92;
+  currentUtterance.pitch = 1.0;
+  currentUtterance.volume = 1.0;
+
+  availableVoices = speechSynthesis.getVoices();
+  const japaneseVoice =
+    availableVoices.find(v => v.lang.toLowerCase() === "ja-jp") ||
+    availableVoices.find(v => v.lang.toLowerCase().startsWith("ja"));
+
+  if (japaneseVoice) currentUtterance.voice = japaneseVoice;
+
+  currentUtterance.onend = () => {
+    if (!isSpeaking || thisRun !== speechRunId) return;
+
+    speechIndex++;
+    // 文の間に短い間を入れる
+    window.setTimeout(() => speakNextChunk(thisRun), 140);
+  };
+
+  currentUtterance.onerror = event => {
+    if (thisRun !== speechRunId) return;
+    if (event.error === "canceled" || event.error === "interrupted") return;
+
+    isSpeaking = false;
+    document.body.classList.remove("speaking");
+    setSession("音声を再生できませんでした");
+  };
+
+  speechSynthesis.speak(currentUtterance);
+}
+
+function stopSpeech() {
+  speechRunId++;
+  isSpeaking = false;
+  speechChunks = [];
+  speechIndex = 0;
+
+  if ("speechSynthesis" in window) speechSynthesis.cancel();
+
+  document.body.classList.remove("speaking");
+  showSubtitle("");
+
+  if ($("session").textContent.includes("SPEAKING")) {
+    setSession("SYSTEM READY");
+  }
+}
+
+// 音声入力
+function startVoice() {
+  const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!Recognition) {
+    alert("このブラウザでは音声入力に対応していません。質問欄に入力してね。");
+    return;
+  }
+
+  const recognition = new Recognition();
+  recognition.lang = "ja-JP";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  setSession("LISTENING…");
+
+  recognition.onresult = event => {
+    $("question").value = event.results[0][0].transcript;
+    setSession("QUESTION RECEIVED");
+  };
+
+  recognition.onerror = () => {
+    setSession("音声入力を利用できませんでした");
+  };
+
+  recognition.onend = () => {
+    if ($("session").textContent === "LISTENING…") {
+      setSession("SYSTEM READY");
+    }
+  };
+
+  try {
+    recognition.start();
+  } catch (error) {
+    setSession("音声入力を開始できませんでした");
+  }
+}
+
+// -----------------------------
+// 図解機能
+// -----------------------------
+let activeDiagramType = null;
+
+function hideDiagram() {
+  $("visualCard").classList.remove("visible");
+  $("visualArea").replaceChildren();
+  activeDiagramType = null;
+}
+
+function renderDiagramIfUseful(question, answer, subject) {
+  hideDiagram();
+
+  const text = question + " " + answer;
+  let type = null;
+
+  // 短い質問・暗記確認などでは、図解を無理に表示しない
+  const isSimple = question.length < 16 &&
+    !/(なぜ|仕組み|違い|比較|グラフ|図|関係|変化|過程|求め方|最大値|最小値|接線|構造)/.test(question);
+
+  if (isSimple) return;
+
+  if (/二次関数|放物線|最大値|最小値|グラフ|頂点|接線/.test(text) ||
+      /数学/.test(subject) && /関数|グラフ/.test(text)) {
+    type = "quadratic";
+  } else if (/光合成|呼吸|細胞|原子|分子|化学反応|電子/.test(text)) {
+    type = "science";
+  } else if (/年表|時代|歴史|平安時代|鎌倉時代|江戸時代|明治時代|出来事|原因と結果/.test(text)) {
+    type = "timeline";
+  }
+
+  if (!type) return;
+
+  activeDiagramType = type;
+  $("visualCard").classList.add("visible");
+
+  if (type === "quadratic") {
+    $("visualTitle").textContent = "数学｜放物線のイメージ";
+    $("visualDescription").textContent =
+      "放物線の形と頂点を視覚的に確認しよう。これは説明用の模式図で、問題の数値に合わせた正確なグラフではありません。";
+    $("visualArea").innerHTML = `
+      <svg class="diagram" viewBox="0 0 320 220" role="img" aria-label="放物線の模式図">
+        <g class="gridline">
+          <path d="M40 20V190 M80 20V190 M120 20V190 M160 20V190 M200 20V190 M240 20V190 M280 20V190"/>
+          <path d="M25 40H295 M25 80H295 M25 120H295 M25 160H295"/>
+        </g>
+        <path class="axis" d="M25 120H300 M160 200V18"/>
+        <path class="glowline" d="M65 25 Q160 260 255 25" />
+        <circle cx="160" cy="120" r="5" fill="#fff" stroke="#5cecff" stroke-width="2"/>
+        <text x="170" y="139">頂点（例）</text>
+        <text x="287" y="112">x</text><text x="169" y="25">y</text>
+      </svg>`;
+  } else if (type === "science") {
+    $("visualTitle").textContent = "理科｜仕組みの模式図";
+    $("visualDescription").textContent =
+      "要素同士の関係を簡単な図で確認しよう。詳しい説明は上のAI回答を見てね。";
+    $("visualArea").innerHTML = `
+      <svg class="diagram" viewBox="0 0 320 190" role="img" aria-label="理科の仕組みの模式図">
+        <rect class="node" x="15" y="55" width="82" height="48" rx="10"/>
+        <rect class="node" x="118" y="55" width="82" height="48" rx="10"/>
+        <rect class="node" x="221" y="55" width="82" height="48" rx="10"/>
+        <path class="glowline" d="M97 79H114 M108 73L114 79L108 85"/>
+        <path class="glowline" d="M200 79H217 M211 73L217 79L211 85"/>
+        <text x="56" y="83" text-anchor="middle">要素 A</text>
+        <text x="159" y="83" text-anchor="middle">変化・反応</text>
+        <text x="262" y="83" text-anchor="middle">要素 B</text>
+        <text x="160" y="145" text-anchor="middle">入力 → 仕組み → 結果</text>
+      </svg>`;
+  } else if (type === "timeline") {
+    $("visualTitle").textContent = "歴史｜出来事の流れ";
+    $("visualDescription").textContent =
+      "時代の流れや原因・結果を整理するための模式図だよ。具体的な年代は回答文で確認しよう。";
+    $("visualArea").innerHTML = `
+      <svg class="diagram" viewBox="0 0 320 170" role="img" aria-label="歴史の流れの模式図">
+        <path class="glowline" d="M42 68H278 M270 60L278 68L270 76"/>
+        <circle class="node" cx="52" cy="68" r="19"/>
+        <circle class="node" cx="160" cy="68" r="19"/>
+        <circle class="node" cx="268" cy="68" r="19"/>
+        <text x="52" y="109" text-anchor="middle">背景</text>
+        <text x="160" y="109" text-anchor="middle">出来事</text>
+        <text x="268" y="109" text-anchor="middle">影響</text>
+      </svg>`;
+  }
+}
+
+function updateDiagramStage(chunk) {
+  if (!activeDiagramType) return;
+
+  const description = $("visualDescription");
+  if (!description) return;
+
+  // 読み上げ中であることを図解の説明にも反映する
+  const base = {
+    quadratic: "放物線の形と頂点を視覚的に確認しよう。これは説明用の模式図で、問題の数値に合わせた正確なグラフではありません。",
+    science: "要素同士の関係を簡単な図で確認しよう。詳しい説明は上のAI回答を見てね。",
+    timeline: "時代の流れや原因・結果を整理するための模式図だよ。具体的な年代は回答文で確認しよう。"
+  };
+
+  description.textContent = base[activeDiagramType] + "\n\n音声で説明中：" + chunk;
+}
+
+// Enterで送信（Shift+Enterは改行）
+$("question").addEventListener("keydown", event => {
+  if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
+    event.preventDefault();
+    if (!$("askButton").disabled) askTutor();
+  }
+});
 </script>
 </body>
 </html>
