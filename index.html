@@ -3,1510 +3,212 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#101426">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXUS | AI家庭教師</title>
-
 <style>
-:root {
-  --bg:#101426;
-  --panel:#191f35;
-  --panel2:#222b46;
-  --text:#f5f7ff;
-  --muted:#aab4d0;
-  --accent:#8c9eff;
-  --accent2:#65e3d2;
-  --border:rgba(255,255,255,.12);
-  --gap:12px;
-  --pad:16px;
-  --radius:17px;
-  --font-scale:1;
-}
-
-* { box-sizing:border-box; }
-
-html, body {
-  width:100%;
-  height:100%;
-  margin:0;
-}
-
-body {
-  overflow:hidden;
-  background:
-    radial-gradient(ellipse at 15% 0%,#29365f 0%,transparent 45%),
-    var(--bg);
-  color:var(--text);
-  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
-  font-size:calc(14px * var(--font-scale));
-}
-
-button, select, textarea, input { font:inherit; }
-button { cursor:pointer; }
-
-button:focus-visible, select:focus-visible,
-textarea:focus-visible, input:focus-visible {
-  outline:2px solid var(--accent2);
-  outline-offset:2px;
-}
-
-.app {
-  width:100%;
-  max-width:1800px;
-  height:100vh;
-  height:100dvh;
-  margin:auto;
-  padding:12px 16px;
-  display:flex;
-  flex-direction:column;
-  gap:var(--gap);
-}
-
-header {
-  flex:0 0 48px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  min-width:0;
-}
-
-.brand {
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.logo {
-  width:40px;
-  height:40px;
-  display:grid;
-  place-items:center;
-  flex-shrink:0;
-  border-radius:13px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#101426;
-  font-size:23px;
-  font-weight:900;
-}
-
-.brand h1 {
-  margin:0;
-  font-size:22px;
-  letter-spacing:3px;
-}
-
-.brand p {
-  margin:2px 0 0;
-  color:var(--muted);
-  font-size:9px;
-  letter-spacing:1.2px;
-}
-
-.header-spacer { flex:1; }
-
-.connection {
-  color:var(--accent2);
-  font-size:11px;
-  white-space:nowrap;
-}
-
-.btn {
-  padding:9px 12px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:var(--panel2);
-  color:var(--text);
-  font-size:12px;
-}
-
-.btn:hover { filter:brightness(1.15); }
-
-.btn.primary {
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#101426;
-  border:0;
-  font-weight:800;
-}
-
-.btn:disabled {
-  opacity:.5;
-  cursor:wait;
-}
-
-/* メイン：左60%、右40% */
-.main {
-  flex:1;
-  min-height:0;
-  display:grid;
-  grid-template-columns:minmax(0,3fr) minmax(0,2fr);
-  gap:var(--gap);
-}
-
-.left, .right {
-  min-width:0;
-  min-height:0;
-  display:flex;
-  flex-direction:column;
-  gap:var(--gap);
-}
-
-.panel {
-  min-width:0;
-  min-height:0;
-  padding:var(--pad);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  background:rgba(25,31,53,.9);
-}
-
-.section-heading {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  flex-shrink:0;
-  margin-bottom:10px;
-}
-
-.section-title {
-  font-size:14px;
-  font-weight:750;
-}
-
-.small {
-  color:var(--muted);
-  font-size:10px;
-  line-height:1.6;
-}
-
-/* 左上：AIアイコン＋字幕。字幕に囲いは付けない */
-.ai-panel {
-  flex:4;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  background:
-    radial-gradient(ellipse at 50% 40%,rgba(140,158,255,.14),transparent 60%),
-    rgba(25,31,53,.6);
-}
-
-.ai-inner {
-  width:100%;
-  height:100%;
-  min-height:0;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-}
-
-.orb {
-  width:clamp(95px,14vh,175px);
-  height:clamp(95px,14vh,175px);
-  flex-shrink:0;
-  border-radius:50%;
-  background:
-    radial-gradient(circle at 32% 25%,#e1e7ff,#8c9eff 35%,#535cba 68%,#252b58);
-  box-shadow:
-    0 0 35px rgba(140,158,255,.42),
-    0 0 85px rgba(101,227,210,.12),
-    inset -10px -12px 25px rgba(0,0,0,.2);
-  animation:float 4s ease-in-out infinite;
-}
-
-.orb.speaking {
-  animation:pulse .8s ease-in-out infinite alternate;
-}
-
-@keyframes float {
-  0%,100% { transform:translateY(0); }
-  50% { transform:translateY(-8px); }
-}
-
-@keyframes pulse {
-  from { transform:scale(.97); filter:brightness(1); }
-  to { transform:scale(1.06); filter:brightness(1.25); }
-}
-
-.orb-label {
-  margin-top:13px;
-  color:var(--accent2);
-  font-size:10px;
-  letter-spacing:2px;
-  text-align:center;
-}
-
-.caption-area {
-  width:100%;
-  min-height:3.5em;
-  max-height:3.5em;
-  padding:7px 4px 0;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  font-size:clamp(13px,1.35vw,18px);
-  line-height:1.7;
-  overflow-wrap:anywhere;
-}
-
-.ai-controls {
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:8px;
-}
-
-/* 左下：解説全文 */
-.answer-panel {
-  flex:3;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-
-.answer-text {
-  flex:1;
-  min-height:0;
-  overflow:auto;
-  padding-right:5px;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-  line-height:1.85;
-  font-size:calc(14px * var(--font-scale));
-}
-
-.answer-text:empty::before {
-  content:"質問を送信すると、ここに解説が表示されます。";
-  color:var(--muted);
-}
-
-/* 右上：AI出力＋小さな学習ステータス */
-.output-panel {
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-
-.right-top {
-  flex:1;
-  min-height:0;
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-}
-
-.output-bars {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
-}
-
-.bar-metric {
-  min-width:0;
-  padding:10px;
-  border-radius:11px;
-  background:rgba(10,15,30,.5);
-}
-
-.bar-label-row {
-  display:flex;
-  justify-content:space-between;
-  align-items:baseline;
-  gap:5px;
-  margin-bottom:8px;
-  color:var(--muted);
-  font-size:10px;
-}
-
-.bar-value {
-  color:var(--text);
-  font-size:12px;
-  font-weight:750;
-  white-space:nowrap;
-}
-
-.bar-track {
-  width:100%;
-  height:8px;
-  overflow:hidden;
-  border-radius:999px;
-  background:#303954;
-}
-
-.bar-fill {
-  width:0;
-  height:100%;
-  border-radius:999px;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  transition:width .35s ease;
-}
-
-.metric-foot {
-  margin-top:5px;
-  color:var(--muted);
-  font-size:9px;
-}
-
-.status-strip {
-  display:flex;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:5px;
-  min-height:22px;
-  padding:0 2px;
-}
-
-.status-chip {
-  padding:3px 6px;
-  border:1px solid var(--border);
-  border-radius:6px;
-  color:var(--muted);
-  font-size:9px;
-  white-space:nowrap;
-}
-
-/* 右下：質問欄 */
-.question-panel {
-  flex:2;
-  display:flex;
-  flex-direction:column;
-  overflow:auto;
-}
-
-.field { margin-bottom:10px; }
-
-label {
-  display:block;
-  margin-bottom:5px;
-  color:#d8def5;
-  font-size:11px;
-}
-
-select, textarea {
-  width:100%;
-  padding:10px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  outline:none;
-  background:#11182c;
-  color:var(--text);
-}
-
-select:focus, textarea:focus { border-color:var(--accent); }
-
-.question-textarea-wrap {
-  flex:1;
-  min-height:80px;
-  display:flex;
-  flex-direction:column;
-}
-
-.question-panel textarea {
-  flex:1;
-  min-height:90px;
-  resize:vertical;
-  line-height:1.7;
-}
-
-textarea::placeholder { color:#7f8baa; }
-
-.auto-speak {
-  display:flex;
-  align-items:center;
-  gap:6px;
-  margin-bottom:10px;
-  color:var(--muted);
-  font-size:10px;
-}
-
-.auto-speak input { width:auto; }
-
-.question-actions {
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-}
-
-.error {
-  margin-top:8px;
-  color:#ffb4bd;
-  white-space:pre-wrap;
-  font-size:11px;
-  line-height:1.6;
-}
-
-.hidden { display:none !important; }
-
-/* 図解画面は質問欄の場所を利用 */
-.diagram-panel {
-  flex:2;
-  display:flex;
-  flex-direction:column;
-  overflow:auto;
-}
-
-.diagram-content {
-  min-height:0;
-  overflow:auto;
-}
-
-.diagram-title {
-  margin:4px 0 10px;
-  color:var(--accent2);
-  font-weight:750;
-  font-size:12px;
-}
-
-.diagram-node {
-  padding:10px;
-  border:1px solid rgba(140,158,255,.4);
-  border-radius:11px;
-  background:#12182c;
-  text-align:center;
-  line-height:1.65;
-  font-size:11px;
-  overflow-wrap:anywhere;
-}
-
-.diagram-arrow {
-  padding:2px;
-  text-align:center;
-  color:var(--accent2);
-  font-size:20px;
-}
-
-/* 設定ウィンドウ */
-.modal-backdrop {
-  position:fixed;
-  inset:0;
-  z-index:20;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-  background:rgba(4,7,17,.75);
-}
-
-.settings-modal {
-  width:min(650px,100%);
-  max-height:88dvh;
-  overflow:auto;
-  padding:20px;
-  border:1px solid var(--border);
-  border-radius:18px;
-  background:var(--panel);
-  box-shadow:0 25px 90px #0008;
-}
-
-.settings-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.settings-section {
-  min-width:0;
-  padding:13px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  background:#12182c;
-}
-
-.settings-section h3 {
-  margin:0 0 12px;
-  font-size:12px;
-}
-
-.range-row { display:flex; gap:8px; align-items:center; }
-input[type=range] { width:100%; accent-color:var(--accent); }
-
-.history-list {
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  max-height:200px;
-  overflow:auto;
-}
-
-.history-item {
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.history-open {
-  flex:1;
-  min-width:0;
-  overflow:hidden;
-  text-align:left;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.history-date {
-  color:var(--muted);
-  font-size:9px;
-  white-space:nowrap;
-}
-
-/* デザイン設定 */
-body.theme-light {
-  --bg:#edf0fa;
-  --panel:#fff;
-  --panel2:#e7ebf7;
-  --text:#182039;
-  --muted:#626e89;
-  --border:rgba(25,38,70,.16);
-}
-
-body.theme-light .bar-metric,
-body.theme-light .settings-section {
-  background:#f3f5fc;
-}
-
-body.theme-light select,
-body.theme-light textarea,
-body.theme-light .diagram-node {
-  background:#f3f5fc;
-  color:var(--text);
-}
-
-body.theme-light .bar-track { background:#d6dcec; }
-
-body.compact {
-  --gap:7px;
-  --pad:10px;
-  --radius:12px;
-}
-
-body.no-borders .panel,
-body.no-borders .settings-section {
-  border-color:transparent;
-}
-
-/* スマホでは縦並び */
-@media(max-width:760px) {
-  body { overflow:auto; }
-
-  .app {
-    height:auto;
-    min-height:100dvh;
-    padding:10px;
-  }
-
-  header {
-    flex-basis:auto;
-    min-height:44px;
-    flex-wrap:wrap;
-  }
-
-  .brand h1 { font-size:19px; }
-  .connection { display:none; }
-
-  .main {
-    display:flex;
-    flex-direction:column;
-  }
-
-  .ai-panel {
-    flex:none;
-    min-height:290px;
-  }
-
-  .answer-panel {
-    flex:none;
-    height:300px;
-  }
-
-  .right-top { flex:none; }
-  .output-panel { flex:none; min-height:120px; }
-  .question-panel, .diagram-panel { flex:none; min-height:390px; }
-
-  .settings-grid { grid-template-columns:1fr; }
-  .orb { width:105px; height:105px; }
-}
+:root{--bg:#0b1020;--panel:#121a2c;--panel2:#18233a;--line:#293754;--text:#eef4ff;--muted:#9aabc8;--blue:#5797ff;--cyan:#67e3ee;--green:#75e0b1;--danger:#ff9a9a}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1b3764 0,transparent 55%),var(--bg);color:var(--text);font-family:Inter,"Noto Sans JP",system-ui,-apple-system,sans-serif;min-height:100vh}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+.app{max-width:1440px;margin:auto;padding:22px}
+.topbar{display:flex;align-items:center;gap:13px;padding:4px 2px 20px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,#6b8cff,#53d8eb);color:#071226;font-weight:900;font-size:20px;box-shadow:0 0 28px #5797ff35;overflow:hidden}
+.logo img{width:100%;height:100%;object-fit:contain}
+.brand h1{font-size:22px;letter-spacing:3px;margin:0}
+.brand p{font-size:12px;color:var(--muted);margin:3px 0 0}
+.status{margin-left:auto;display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}
+.dot{width:8px;height:8px;background:var(--green);border-radius:50%;box-shadow:0 0 10px #75e0b1}
+.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:18px;align-items:start}
+.panel{background:linear-gradient(160deg,#151f34f2,#101729f5);border:1px solid var(--line);border-radius:20px;overflow:hidden;min-width:0;box-shadow:0 15px 45px #0002}
+.panel-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.panel-head h2{font-size:16px;margin:0}
+.eyebrow{font-size:11px;color:var(--cyan);letter-spacing:1.2px;text-transform:uppercase}
+.panel-body{padding:18px 20px}
+.section-label{font-size:12px;color:var(--muted);font-weight:700;margin:0 0 10px}
+.explanation{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.85;font-size:14px;min-height:190px;max-height:48vh;overflow:auto;padding:17px;border-radius:14px;background:#0b1221;border:1px solid #24324e}
+.empty{display:grid;place-items:center;text-align:center;color:var(--muted);min-height:190px;line-height:1.8}
+.empty .big{font-size:34px;margin-bottom:8px}
+.followup{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.field{width:100%;border:1px solid #334463;border-radius:12px;background:#0b1324;color:var(--text);padding:12px 14px;outline:none;resize:vertical;min-height:48px}
+.field:focus{border-color:var(--blue);box-shadow:0 0 0 3px #5797ff20}
+.field::placeholder{color:#7283a0}
+.row{display:flex;gap:9px;align-items:stretch}
+.row .field{flex:1;min-width:0}
+.btn{border:0;border-radius:12px;padding:11px 15px;background:linear-gradient(135deg,#5797ff,#4776e8);color:white;font-weight:700;transition:transform .15s,filter .15s;white-space:nowrap}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.secondary{background:#202e48;border:1px solid #344663;color:#e5efff}
+.btn.iconbtn{width:46px;padding:0;display:grid;place-items:center;font-size:18px}
+.btn.recording{background:linear-gradient(135deg,#d85d76,#a82f58);box-shadow:0 0 0 4px #d85d7622}
+.hint{font-size:11px;color:var(--muted);line-height:1.6;margin:8px 2px 0}
+.settings{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.setting label{display:block;font-size:11px;color:var(--muted);margin:0 0 6px}
+.setting select{width:100%;background:#0b1324;color:var(--text);border:1px solid #334463;border-radius:10px;padding:10px}
+.new-question{display:flex;flex-direction:column;gap:14px}
+.hero{display:flex;align-items:center;gap:16px;padding:17px;border:1px solid #2a4267;border-radius:16px;background:linear-gradient(120deg,#15294a,#132239)}
+.orb{width:72px;height:72px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#b7f7ff,#529dff 38%,#344fd4 70%,#10172c);box-shadow:0 0 32px #5797ff45;animation:float 4s ease-in-out infinite}
+.orb img{width:100%;height:100%;object-fit:contain}
+.orb span{font-size:27px;font-weight:900;color:#07152d}
+.hero h3{margin:0 0 5px;font-size:15px}
+.hero p{margin:0;color:var(--muted);font-size:12px;line-height:1.7}
+.voice-card{padding:15px;border-radius:15px;border:1px solid var(--line);background:#0e1729}
+.voice-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.voice-top strong{font-size:13px}
+.voice-actions{display:flex;gap:8px;flex-wrap:wrap}
+.voice-actions .btn{font-size:12px;padding:9px 11px}
+.caption{min-height:50px;padding:12px;border-radius:10px;background:#080e1b;color:#d7e8ff;font-size:13px;line-height:1.7;white-space:pre-wrap}
+.caption:empty:before{content:'読み上げ字幕はここに表示されます';color:#647895}
+.messages{display:flex;flex-direction:column;gap:12px;max-height:32vh;overflow:auto}
+.message{padding:12px 14px;border-radius:13px;line-height:1.7;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
+.message.user{align-self:flex-end;max-width:90%;background:#244b83}
+.message.ai{align-self:stretch;background:#0b1324;border:1px solid #263653}
+.message .who{font-size:10px;color:#91bfff;font-weight:700;margin-bottom:5px}
+.notice{font-size:11px;color:var(--muted);line-height:1.6}
+.error{color:var(--danger)}
+.footer{padding:20px 4px 4px;text-align:center;font-size:11px;color:#647895}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@media(max-width:850px){.app{padding:13px}.layout{grid-template-columns:1fr}.explanation{max-height:none;min-height:160px}.messages{max-height:38vh}.status{font-size:10px}.panel-body{padding:15px}.panel-head{padding:15px}}
+@media(max-width:480px){.brand h1{font-size:19px}.brand p{font-size:10px}.logo{width:39px;height:39px}.settings{grid-template-columns:1fr 1fr}.row{flex-wrap:wrap}.row .field{flex-basis:100%}.row .btn{flex:1}.hero{padding:13px}.orb{width:58px;height:58px}.voice-top{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
-
 <body>
 <div class="app">
-
-<header>
-  <div class="brand">
-    <div class="logo">N</div>
-    <div>
-      <h1>NEXUS</h1>
-      <p>YOUR PERSONAL AI TUTOR</p>
-    </div>
-  </div>
-  <div class="header-spacer"></div>
-  <div class="connection" id="connectionStatus">● 準備完了</div>
-  <button class="btn" id="openSettings">⚙ 設定</button>
-</header>
-
-<main class="main">
-
-  <!-- 左60% -->
-  <section class="left">
-
-    <section class="panel ai-panel">
-      <div class="ai-inner">
-        <div class="orb" id="orb"></div>
-        <div class="orb-label" id="orbLabel">READY TO LEARN</div>
-        <div class="caption-area" id="captionArea" aria-live="polite"></div>
-        <div class="ai-controls">
-          <button class="btn" id="readAnswer">🔊 読み上げ</button>
-          <button class="btn" id="stopSpeech">■ 停止</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel answer-panel">
-      <div class="section-heading">
-        <div class="section-title">📘 解説全文</div>
-        <button class="btn" id="copyAnswer">コピー</button>
-      </div>
-      <div class="answer-text" id="answerText"></div>
-      <div class="error hidden" id="errorMessage"></div>
-    </section>
-
-  </section>
-
-  <!-- 右40% -->
-  <section class="right">
-
-    <div class="right-top">
-      <section class="panel output-panel">
-        <div class="section-heading">
-          <div class="section-title">⚡ AI出力</div>
-          <div class="small" id="outputState">待機中</div>
-        </div>
-
-        <div class="output-bars">
-          <div class="bar-metric">
-            <div class="bar-label-row">
-              <span>回答生成時間</span>
-              <span class="bar-value" id="generationTime">— s</span>
-            </div>
-            <div class="bar-track">
-              <div class="bar-fill" id="generationBar"></div>
-            </div>
-            <div class="metric-foot" id="generationFoot">回答受信後に計測</div>
-          </div>
-
-          <div class="bar-metric">
-            <div class="bar-label-row">
-              <span>読み上げ時間（推定）</span>
-              <span class="bar-value" id="speechTime">— s</span>
-            </div>
-            <div class="bar-track">
-              <div class="bar-fill" id="speechBar"></div>
-            </div>
-            <div class="metric-foot" id="speechFoot">回答文から推定</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 学習ステータスはAI出力のすぐ下 -->
-      <div class="status-strip">
-        <span class="status-chip" id="metricSubject">教科：数学</span>
-        <span class="status-chip" id="metricLevel">高校生向け</span>
-        <span class="status-chip" id="metricCount">質問 0回</span>
-        <span class="status-chip" id="voiceStatus">音声：待機中</span>
-      </div>
-    </div>
-
-    <section class="panel question-panel" id="questionPanel">
-      <div class="section-heading">
-        <div class="section-title">💬 質問欄</div>
-      </div>
-
-      <div class="field">
-        <label for="subject">教科</label>
-        <select id="subject">
-          <option>数学</option>
-          <option>数I</option>
-          <option>数A</option>
-          <option>数II</option>
-          <option>数B</option>
-          <option>化学</option>
-          <option>物理</option>
-          <option>生物</option>
-          <option>英語</option>
-          <option>英語コミュニケーション</option>
-          <option>論理表現</option>
-          <option>国語</option>
-          <option>古典</option>
-          <option>日本史</option>
-          <option>地理</option>
-          <option>情報</option>
-          <option>その他</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="level">説明レベル</label>
-        <select id="level">
-          <option value="高校生向け。基礎からわかりやすく">高校生向け・基礎から</option>
-          <option value="高校生向け。標準レベル">高校生向け・標準</option>
-          <option value="高校生向け。応用問題まで詳しく">高校生向け・応用</option>
-          <option value="中学生にもわかる簡単な説明">中学生にもわかる</option>
-        </select>
-      </div>
-
-      <div class="field question-textarea-wrap">
-        <label for="question">質問内容</label>
-        <textarea id="question" placeholder="例：接線の方程式の求め方を、途中式も含めて説明して！"></textarea>
-      </div>
-
-      <label class="auto-speak">
-        <input id="autoSpeak" type="checkbox" checked>
-        回答を自動で読み上げる
-      </label>
-
-      <div class="question-actions">
-        <button class="btn primary" id="sendButton">質問を送信 →</button>
-        <button class="btn" id="voiceInputButton">🎙 音声入力</button>
-      </div>
-      <div class="error hidden" id="questionError"></div>
-    </section>
-
-    <!-- 図解は質問欄と同じ場所に表示 -->
-    <section class="panel diagram-panel hidden" id="diagramPanel">
-      <div class="section-heading">
-        <div class="section-title">📊 解説の図解</div>
-        <button class="btn" id="backToQuestion">質問欄へ戻る</button>
-      </div>
-      <div class="diagram-content" id="diagramContent"></div>
-      <p class="small">図解は解説文を整理した補助表示です。詳しい説明は左側の解説全文を確認してください。</p>
-    </section>
-
-  </section>
-</main>
+  <header class="topbar">
+    <div class="logo">
+  <img src="./nexus-logo.png" alt="NEXUS">
 </div>
+    <div class="brand"><h1>NEXUS</h1><p>あなたの学びに寄り添う AI家庭教師</p></div>
+    <div class="status"><span class="dot"></span><span id="connectionStatus">準備完了</span></div>
+  </header>
 
-<!-- 設定 -->
-<div class="modal-backdrop hidden" id="settingsBackdrop">
-  <section class="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
-    <div class="section-heading">
-      <div class="section-title" id="settingsTitle">⚙ NEXUS設定</div>
-      <button class="btn" id="closeSettings">閉じる ✕</button>
-    </div>
-
-    <div class="settings-grid">
-
-      <section class="settings-section">
-        <h3>🔊 音声設定</h3>
-
-        <div class="field">
-          <label for="voiceSelect">読み上げ音声</label>
-          <select id="voiceSelect">
-            <option value="">ブラウザの標準音声</option>
-          </select>
+  <main class="layout">
+    <section class="panel" aria-labelledby="lessonTitle">
+      <div class="panel-head"><span>📘</span><div><div class="eyebrow">LEARN & EXPLORE</div><h2 id="lessonTitle">解説全文・追加質問</h2></div></div>
+      <div class="panel-body">
+        <p class="section-label">AIの解説全文</p>
+        <div id="explanation" class="explanation"><div class="empty"><div><div class="big">✦</div>右側から質問すると、ここに解説が表示されます。<br>解説を読んで、わからない部分をさらに質問しよう。</div></div></div>
+        <div class="followup">
+          <p class="section-label">💡 この解説について、もっと質問する</p>
+          <form id="followupForm">
+            <div class="row"><textarea id="followupInput" class="field" rows="2" placeholder="例：なぜこの公式を使うの？ もう少し簡単に説明して！" aria-label="解説への追加質問"></textarea><button class="btn" id="followupSend" type="submit">追加質問 ↗</button></div>
+          </form>
+          <p class="hint">ここでは直前の質問・解説・追加質問の流れを踏まえて回答します。</p>
         </div>
+      </div>
+    </section>
 
-        <div class="field">
-          <label for="speedRange">
-            読み上げ速度：<span id="speedValue">1.0倍</span>
-          </label>
-          <div class="range-row">
-            <input type="range" id="speedRange" min="0.7" max="1.6" step="0.1" value="1">
-          </div>
+    <section class="panel" aria-labelledby="newQuestionTitle">
+      <div class="panel-head"><span>💬</span><div><div class="eyebrow">ASK SOMETHING NEW</div><h2 id="newQuestionTitle">新しい質問</h2></div></div>
+      <div class="panel-body new-question">
+        <div class="hero"><div class="orb">
+  <img src="./nexus-logo.png" alt="NEXUS AI">
+</div><div><h3>何でも聞いてみよう</h3><p>数学・英語・理科・社会など。<br>わかるまで一緒に考えます。</p></div></div>
+        <div class="settings">
+          <div class="setting"><label for="subject">教科</label><select id="subject"><option>指定なし</option><option>数学</option><option>英語</option><option>国語</option><option>化学</option><option>物理</option><option>生物</option><option>日本史</option><option>世界史</option><option>地理</option><option>情報</option></select></div>
+          <div class="setting"><label for="level">説明のレベル</label><select id="level"><option value="高校生向け">高校生向け</option><option value="中学生向け">中学生向け</option><option value="基礎から簡単に">基礎から簡単に</option><option value="詳しく専門的に">詳しく専門的に</option></select></div>
         </div>
-
-        <p class="small">利用できる音声は、端末とブラウザによって異なります。</p>
-      </section>
-
-      <section class="settings-section">
-        <h3>🎨 画面デザイン</h3>
-
-        <div class="field">
-          <label for="themeSelect">配色</label>
-          <select id="themeSelect">
-            <option value="dark">ダーク</option>
-            <option value="light">ライト</option>
-          </select>
+        <form id="newQuestionForm">
+          <p class="section-label">新しい問題・テーマを入力</p>
+          <textarea id="newQuestionInput" class="field" rows="4" placeholder="例：二次関数の最大値と最小値の求め方を教えて！" aria-label="新しい質問" required></textarea>
+          <div class="row" style="margin-top:9px"><button class="btn" type="submit" id="newQuestionSend" style="flex:1">解説を作成 ↗</button><button class="btn secondary iconbtn" type="button" id="newMic" title="音声入力" aria-label="新しい質問を音声入力">🎙</button></div>
+        </form>
+        <div class="voice-card">
+          <div class="voice-top"><strong>🎧 音声で会話</strong><div class="voice-actions"><button class="btn secondary" id="readAnswer" type="button">▶ 回答を読み上げ</button><button class="btn secondary" id="stopSpeech" type="button">■ 停止</button></div></div>
+          <div class="caption" id="caption" aria-live="polite"></div>
+          <div class="voice-actions" style="margin-top:10px"><button class="btn secondary" id="conversationMic" type="button">🎙 音声で追加質問</button><span class="notice" id="voiceStatus">マイクを押して話してください。</span></div>
+          <p class="hint">音声入力は対応ブラウザ（主にChrome）で利用できます。初回はマイクの使用を許可してください。音声読み上げはブラウザの機能を使います。</p>
         </div>
-
-        <div class="field">
-          <label for="densitySelect">余白・枠組み</label>
-          <select id="densitySelect">
-            <option value="normal">標準</option>
-            <option value="compact">コンパクト</option>
-            <option value="borderless">枠を控えめに</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="fontSelect">文字サイズ</label>
-          <select id="fontSelect">
-            <option value="1">標準</option>
-            <option value="1.1">少し大きい</option>
-            <option value="1.2">大きい</option>
-          </select>
-        </div>
-      </section>
-
-      <section class="settings-section" style="grid-column:1/-1">
-        <div class="section-heading">
-          <h3 style="margin:0">🕘 質問履歴</h3>
-          <button class="btn" id="clearHistory">履歴を削除</button>
-        </div>
-        <div class="history-list" id="historyList"></div>
-        <p class="small">履歴はこのブラウザに保存されます。同じブラウザで再度開くと確認できます。</p>
-      </section>
-
-    </div>
-  </section>
+        <div><p class="section-label">この質問の会話</p><div id="messages" class="messages"><div class="notice">新しい質問を送ると、ここに会話が表示されます。</div></div></div>
+        <p class="notice">新しい質問は、左側の解説に対する追加質問とは別の会話として扱われます。</p>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">NEXUS · Learn at your own pace</footer>
 </div>
-
 <script>
-"use strict";
-
-/* 既存のCloudflare WorkerのURLを維持 */
-const WORKER_URL =
-  "https://autumn-dawn-0525.sur0730donald.workers.dev/";
-
-const $ = id => document.getElementById(id);
-
-let lastAnswer = "";
-let questionCount = 0;
-let conversationHistory = [];
-let diagramReturnTimer = null;
-let diagramVisible = false;
-let currentUtterance = null;
+// Cloudflare Worker API endpoint
+const API_URL = 'https://autumn-dawn-0525.sur0730donald.workers.dev/';
+const $ = (id) => document.getElementById(id);
+let currentExplanation = '';
+let currentQuestion = '';
+let followupHistory = [];
+let newConversationHistory = [];
+let lastAnswer = '';
 let recognition = null;
-let voices = [];
-let historyItems = [];
+let activeMicTarget = null;
+let speakingUtterance = null;
 
-function setStatus(text) {
-  $("connectionStatus").textContent = "● " + text;
+function setStatus(message, isError=false){ $('connectionStatus').textContent = message; $('connectionStatus').style.color = isError ? 'var(--danger)' : 'var(--muted)'; }
+function setBusy(button, busy, label){ button.disabled = busy; if(busy){button.dataset.originalText=button.textContent;button.textContent=label||'考え中…';}else if(button.dataset.originalText){button.textContent=button.dataset.originalText;delete button.dataset.originalText;} }
+function addMessage(who, text){
+  const box=$('messages'); const placeholder=box.querySelector('.notice'); if(placeholder) placeholder.remove();
+  const node=document.createElement('div'); node.className='message '+(who==='あなた'?'user':'ai');
+  const label=document.createElement('div'); label.className='who'; label.textContent=who;
+  const body=document.createElement('div'); body.textContent=text; node.append(label,body); box.appendChild(node); box.scrollTop=box.scrollHeight;
 }
-
-function setVoiceStatus(text) {
-  $("voiceStatus").textContent = "音声：" + text;
+function renderExplanation(text){currentExplanation=text;const box=$('explanation');box.textContent=text;box.scrollTop=0;}
+function formatHistory(history){return history.map(item=>({role:item.role,content:item.content}));}
+async function askAI({question, history, button, onAnswer}){
+  if(!question.trim()) return;
+  setBusy(button,true,'考え中…');setStatus('回答を作成中…');
+  try{
+    const response=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question,subject:$('subject').value,level:$('level').value,history:formatHistory(history)})});
+    if(!response.ok) throw new Error('サーバーからエラーが返されました（'+response.status+'）');
+    const data=await response.json();
+    if(!data || typeof data.answer!=='string' || !data.answer.trim()) throw new Error('回答が空でした。もう一度試してください。');
+    onAnswer(data.answer);setStatus('準備完了');
+  }catch(error){
+    console.error(error);setStatus('接続エラー',true);const message='回答を取得できませんでした。ネット接続やWorkerの設定を確認して、もう一度試してください。\n詳細：'+error.message;
+    addMessage('NEXUS',message);$('voiceStatus').textContent='回答を取得できませんでした。';
+  }finally{setBusy(button,false);}
 }
-
-function showError(text, target="errorMessage") {
-  const el = $(target);
-  el.textContent = text;
-  el.classList.remove("hidden");
-}
-
-function clearError(target="errorMessage") {
-  const el = $(target);
-  el.textContent = "";
-  el.classList.add("hidden");
-}
-
-function updateStatus() {
-  $("metricSubject").textContent = "教科：" + $("subject").value;
-  $("metricLevel").textContent = $("level").selectedOptions[0].textContent;
-  $("metricCount").textContent = "質問 " + questionCount + "回";
-}
-
-function setBar(id, value, max) {
-  const percent = Math.max(0, Math.min(100, value / max * 100));
-  $(id).style.width = percent + "%";
-}
-
-function getSpeechRate() {
-  return Number($("speedRange").value) || 1;
-}
-
-function estimateSpeechSeconds(text) {
-  // 日本語の読み上げ時間を文字数から推定
-  return Math.max(1, Math.round(String(text).length / (7.5 * getSpeechRate())));
-}
-
-function updateSpeechEstimate(text) {
-  const seconds = estimateSpeechSeconds(text);
-  $("speechTime").textContent = seconds + " s";
-  $("speechFoot").textContent = "文字数からの推定";
-  setBar("speechBar", seconds, Math.max(30, seconds * 1.5));
-}
-
-function setGenerationTime(seconds) {
-  $("generationTime").textContent = seconds.toFixed(1) + " s";
-  $("generationFoot").textContent = "送信から回答受信まで";
-  setBar("generationBar", seconds, Math.max(10, seconds * 1.5));
-}
-
-function showQuestionPanel() {
-  clearTimeout(diagramReturnTimer);
-  diagramReturnTimer = null;
-  diagramVisible = false;
-  $("diagramPanel").classList.add("hidden");
-  $("questionPanel").classList.remove("hidden");
-}
-
-function showDiagram(answer) {
-  const content = $("diagramContent");
-  content.replaceChildren();
-
-  const title = document.createElement("div");
-  title.className = "diagram-title";
-  title.textContent = "解説のポイント";
-  content.appendChild(title);
-
-  const parts = String(answer || "")
-    .split(/\n+|(?<=[。！？])\s*/)
-    .map(s => s.replace(/^[\s\-*#\d.]+/, "").trim())
-    .filter(Boolean);
-
-  const points = [];
-  for (const part of parts) {
-    if (!points.includes(part)) points.push(part);
-    if (points.length >= 5) break;
-  }
-
-  if (!points.length) points.push(String(answer || "回答がありません。"));
-
-  points.forEach((point, index) => {
-    const node = document.createElement("div");
-    node.className = "diagram-node";
-    node.textContent = point.length > 220 ? point.slice(0, 217) + "…" : point;
-    content.appendChild(node);
-
-    if (index < points.length - 1) {
-      const arrow = document.createElement("div");
-      arrow.className = "diagram-arrow";
-      arrow.textContent = "↓";
-      content.appendChild(arrow);
-    }
-  });
-
-  $("questionPanel").classList.add("hidden");
-  $("diagramPanel").classList.remove("hidden");
-  diagramVisible = true;
-
-  clearTimeout(diagramReturnTimer);
-  diagramReturnTimer = null;
-}
-
-function returnToQuestionAfterSpeech() {
-  if (!diagramVisible) return;
-  clearTimeout(diagramReturnTimer);
-  diagramReturnTimer = setTimeout(showQuestionPanel, 10000);
-}
-
-function stopSpeech() {
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-  }
-
-  currentUtterance = null;
-  $("orb").classList.remove("speaking");
-  $("orbLabel").textContent = "READY TO LEARN";
-  $("captionArea").textContent = "";
-  setVoiceStatus("待機中");
-
-  clearTimeout(diagramReturnTimer);
-  diagramReturnTimer = null;
-}
-
-function refreshVoices() {
-  if (!("speechSynthesis" in window)) return;
-
-  voices = window.speechSynthesis.getVoices();
-  const select = $("voiceSelect");
-  const previous = select.value;
-
-  select.replaceChildren();
-
-  const standard = document.createElement("option");
-  standard.value = "";
-  standard.textContent = "ブラウザの標準音声";
-  select.appendChild(standard);
-
-  voices.forEach((voice, index) => {
-    const option = document.createElement("option");
-    option.value = String(index);
-    option.textContent = voice.name + " (" + voice.lang + ")";
-    select.appendChild(option);
-  });
-
-  if ([...select.options].some(option => option.value === previous)) {
-    select.value = previous;
-  }
-}
-
-function splitCaption(text, maxLength=42) {
-  const result = [];
-  let current = "";
-
-  for (const character of text) {
-    current += character;
-
-    if (current.length >= maxLength && /[。！？、，\s]/.test(character)) {
-      result.push(current.trim());
-      current = "";
-    } else if (current.length >= maxLength + 12) {
-      result.push(current.trim());
-      current = "";
-    }
-  }
-
-  if (current.trim()) result.push(current.trim());
-  return result;
-}
-
-function speakAnswer(text) {
-  if (!("speechSynthesis" in window)) {
-    setVoiceStatus("非対応");
-    return;
-  }
-
-  stopSpeech();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  currentUtterance = utterance;
-  utterance.lang = "ja-JP";
-  utterance.rate = getSpeechRate();
-  utterance.pitch = 1;
-
-  const selectedVoice = $("voiceSelect").value;
-
-  if (selectedVoice !== "" && voices[Number(selectedVoice)]) {
-    utterance.voice = voices[Number(selectedVoice)];
-  } else {
-    const japaneseVoice = voices.find(v => v.lang.toLowerCase().startsWith("ja"));
-    if (japaneseVoice) utterance.voice = japaneseVoice;
-  }
-
-  const captions = splitCaption(text);
-
-  utterance.onstart = () => {
-    $("orb").classList.add("speaking");
-    $("orbLabel").textContent = "EXPLAINING";
-    setVoiceStatus("読み上げ中");
-  };
-
-  utterance.onboundary = event => {
-    if (currentUtterance !== utterance) return;
-
-    const index = Math.min(
-      captions.length - 1,
-      Math.floor(Math.max(0, event.charIndex) / 42)
-    );
-
-    if (captions[index]) {
-      $("captionArea").textContent = captions[index];
-    }
-  };
-
-  utterance.onend = () => {
-    if (currentUtterance !== utterance) return;
-
-    currentUtterance = null;
-    $("orb").classList.remove("speaking");
-    $("orbLabel").textContent = "EXPLANATION COMPLETE";
-    setVoiceStatus("読み上げ完了");
-
-    // 読み上げ終了から10秒後に質問欄へ戻す
-    returnToQuestionAfterSpeech();
-  };
-
-  utterance.onerror = event => {
-    if (currentUtterance !== utterance) return;
-
-    currentUtterance = null;
-    $("orb").classList.remove("speaking");
-    $("orbLabel").textContent = "READY TO LEARN";
-    setVoiceStatus("再生エラー");
-    console.warn("Speech synthesis error:", event.error);
-  };
-
-  window.speechSynthesis.speak(utterance);
-}
-
-function shortTitle(question) {
-  const clean = question.replace(/\s+/g, " ").trim();
-  return clean.length > 24 ? clean.slice(0, 23) + "…" : clean || "質問";
-}
-
-function saveHistory(question, answer, subject, level) {
-  const item = {
-    id: Date.now(),
-    title: shortTitle(question),
-    question,
-    answer,
-    subject,
-    level,
-    date: new Date().toLocaleString("ja-JP", {
-      month:"numeric",
-      day:"numeric",
-      hour:"2-digit",
-      minute:"2-digit"
-    })
-  };
-
-  historyItems.unshift(item);
-  historyItems = historyItems.slice(0, 30);
-
-  try {
-    localStorage.setItem("nexusHistory", JSON.stringify(historyItems));
-  } catch (error) {
-    console.warn("履歴を保存できませんでした。", error);
-  }
-
-  renderHistory();
-}
-
-function loadHistory() {
-  try {
-    const parsed = JSON.parse(localStorage.getItem("nexusHistory") || "[]");
-    if (Array.isArray(parsed)) historyItems = parsed;
-  } catch {
-    historyItems = [];
-  }
-
-  renderHistory();
-}
-
-function renderHistory() {
-  const list = $("historyList");
-  list.replaceChildren();
-
-  if (!historyItems.length) {
-    const empty = document.createElement("p");
-    empty.className = "small";
-    empty.textContent = "まだ履歴はありません。";
-    list.appendChild(empty);
-    return;
-  }
-
-  historyItems.forEach(item => {
-    const row = document.createElement("div");
-    row.className = "history-item";
-
-    const button = document.createElement("button");
-    button.className = "btn history-open";
-    button.textContent = item.title;
-    button.title = item.question;
-
-    button.addEventListener("click", () => {
-      stopSpeech();
-
-      lastAnswer = item.answer || "";
-      $("answerText").textContent = lastAnswer;
-      $("question").value = item.question || "";
-      $("subject").value = item.subject || "数学";
-      $("level").value = item.level || $("level").value;
-
-      updateStatus();
-      updateSpeechEstimate(lastAnswer);
-      showQuestionPanel();
-      clearError();
-      clearError("questionError");
-      $("outputState").textContent = "履歴を表示中";
-      $("settingsBackdrop").classList.add("hidden");
-    });
-
-    const date = document.createElement("span");
-    date.className = "history-date";
-    date.textContent = item.date || "";
-
-    row.append(button, date);
-    list.appendChild(row);
-  });
-}
-
-async function sendQuestion() {
-  const question = $("question").value.trim();
-  const subject = $("subject").value;
-  const level = $("level").value;
-
-  if (!question) {
-    showError("質問を入力してください。", "questionError");
-    $("question").focus();
-    return;
-  }
-
-  clearError();
-  clearError("questionError");
-  stopSpeech();
-  showQuestionPanel();
-
-  $("sendButton").disabled = true;
-  $("sendButton").textContent = "回答を作成中…";
-  $("answerText").textContent = "解説を作成しています。少し待ってね。";
-  $("outputState").textContent = "生成中…";
-  $("generationTime").textContent = "計測中";
-  $("generationBar").style.width = "12%";
-  setStatus("回答を作成中");
-
-  const startTime = performance.now();
-
-  try {
-    const response = await fetch(WORKER_URL, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        question:
-          question +
-          "\n\n高校生にもわかるように説明してください。" +
-          "結論、理由、途中の考え方、必要なら具体例の順で説明してください。" +
-          "計算問題では途中式を省略しないでください。" +
-          "簡潔すぎず、理解に必要な説明をしてください。",
-        subject,
-        level,
-        history:conversationHistory.slice(-8)
-      })
-    });
-
-    const elapsed = (performance.now() - startTime) / 1000;
-    setGenerationTime(elapsed);
-
-    if (!response.ok) {
-      throw new Error("サーバーエラー（HTTP " + response.status + "）。");
-    }
-
-    const data = await response.json();
-
-    if (!data.answer || typeof data.answer !== "string") {
-      throw new Error("回答を取得できませんでした。Workerの返却内容を確認してください。");
-    }
-
-    lastAnswer = data.answer.trim();
-    questionCount++;
-
-    conversationHistory.push(
-      {role:"user", content:question},
-      {role:"assistant", content:lastAnswer}
-    );
-    conversationHistory = conversationHistory.slice(-12);
-
-    $("answerText").textContent = lastAnswer;
-    updateStatus();
-    updateSpeechEstimate(lastAnswer);
-    saveHistory(question, lastAnswer, subject, level);
-
-    $("outputState").textContent = "回答完了";
-    showDiagram(lastAnswer);
-    setStatus("回答完了");
-
-    if ($("autoSpeak").checked) {
-      speakAnswer(lastAnswer);
-    } else {
-      setVoiceStatus("読み上げ待機中");
-      $("orbLabel").textContent = "ANSWER READY";
-    }
-
-  } catch (error) {
-    console.error(error);
-
-    $("answerText").textContent = "";
-    showError(
-      "回答を取得できませんでした。\n" +
-      (error.message || "通信エラー") +
-      "\n\nインターネット接続とCloudflare Workerの状態を確認してください。"
-    );
-
-    $("outputState").textContent = "エラー";
-    setStatus("エラー");
-
-  } finally {
-    $("sendButton").disabled = false;
-    $("sendButton").textContent = "質問を送信 →";
-  }
-}
-
-/* 質問・読み上げ */
-$("sendButton").addEventListener("click", sendQuestion);
-
-$("question").addEventListener("keydown", event => {
-  if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
-    sendQuestion();
-  }
+$('newQuestionForm').addEventListener('submit',async(event)=>{
+  event.preventDefault();const input=$('newQuestionInput');const question=input.value.trim();if(!question)return;
+  const button=$('newQuestionSend');addMessage('あなた',question);input.value='';
+  await askAI({question,history:newConversationHistory,button,onAnswer:(answer)=>{
+    newConversationHistory.push({role:'user',content:question},{role:'assistant',content:answer});lastAnswer=answer;addMessage('NEXUS',answer);renderExplanation(answer);currentQuestion=question;followupHistory=[{role:'user',content:question},{role:'assistant',content:answer}];
+  }});
+});
+$('followupForm').addEventListener('submit',async(event)=>{
+  event.preventDefault();const input=$('followupInput');const question=input.value.trim();if(!question)return;
+  if(!currentExplanation){$('voiceStatus').textContent='先に右側から質問してください。';return;}
+  const button=$('followupSend');input.value='';
+  const history=[...followupHistory];
+  const prompt='ユーザーは、次の元の質問と解説について追加質問しています。元の解説と会話の流れを踏まえ、高校生にもわかるように答えてください。\n\n元の質問：'+currentQuestion+'\n\n直前の解説：\n'+currentExplanation+'\n\n追加質問：'+question;
+  await askAI({question:prompt,history,button,onAnswer:(answer)=>{
+    followupHistory.push({role:'user',content:question},{role:'assistant',content:answer});renderExplanation(currentExplanation+'\n\n──────── 追加質問 ────────\n質問：'+question+'\n\n回答：\n'+answer);lastAnswer=answer;addMessage('あなた（解説への質問）',question);addMessage('NEXUS（追加解説）',answer);
+  }});
 });
 
-$("readAnswer").addEventListener("click", () => {
-  if (lastAnswer) speakAnswer(lastAnswer);
-  else showError("先に質問を送信してください。");
-});
-
-$("stopSpeech").addEventListener("click", stopSpeech);
-
-$("backToQuestion").addEventListener("click", () => {
-  showQuestionPanel();
-  $("question").focus();
-});
-
-$("subject").addEventListener("change", updateStatus);
-$("level").addEventListener("change", updateStatus);
-
-$("copyAnswer").addEventListener("click", async () => {
-  if (!lastAnswer) {
-    showError("コピーする解説がありません。");
-    return;
-  }
-
-  try {
-    await navigator.clipboard.writeText(lastAnswer);
-    $("copyAnswer").textContent = "コピー完了 ✓";
-
-    setTimeout(() => {
-      $("copyAnswer").textContent = "コピー";
-    }, 1600);
-
-  } catch {
-    showError("コピーできませんでした。解説全文を選択してコピーしてください。");
-  }
-});
-
-/* 設定ウィンドウ */
-$("openSettings").addEventListener("click", () => {
-  $("settingsBackdrop").classList.remove("hidden");
-  refreshVoices();
-});
-
-$("closeSettings").addEventListener("click", () => {
-  $("settingsBackdrop").classList.add("hidden");
-});
-
-$("settingsBackdrop").addEventListener("click", event => {
-  if (event.target === $("settingsBackdrop")) {
-    $("settingsBackdrop").classList.add("hidden");
-  }
-});
-
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") {
-    $("settingsBackdrop").classList.add("hidden");
-  }
-});
-
-/* 音声の選択・速度 */
-$("speedRange").addEventListener("input", () => {
-  $("speedValue").textContent = getSpeechRate().toFixed(1) + "倍";
-
-  if (lastAnswer) updateSpeechEstimate(lastAnswer);
-});
-
-/* 配色・枠組み・文字サイズを保存 */
-$("themeSelect").addEventListener("change", () => {
-  const theme = $("themeSelect").value;
-  document.body.classList.toggle("theme-light", theme === "light");
-
-  try {
-    localStorage.setItem("nexusTheme", theme);
-  } catch {}
-});
-
-$("densitySelect").addEventListener("change", () => {
-  const density = $("densitySelect").value;
-
-  document.body.classList.toggle("compact", density === "compact");
-  document.body.classList.toggle("no-borders", density === "borderless");
-
-  try {
-    localStorage.setItem("nexusDensity", density);
-  } catch {}
-});
-
-$("fontSelect").addEventListener("change", () => {
-  const size = $("fontSelect").value;
-  document.documentElement.style.setProperty("--font-scale", size);
-
-  try {
-    localStorage.setItem("nexusFont", size);
-  } catch {}
-});
-
-/* 履歴の削除 */
-$("clearHistory").addEventListener("click", () => {
-  if (!confirm("保存した質問履歴をすべて削除しますか？")) return;
-
-  historyItems = [];
-
-  try {
-    localStorage.removeItem("nexusHistory");
-  } catch {}
-
-  renderHistory();
-});
-
-/* 音声入力：対応ブラウザのみ */
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-
-if (SpeechRecognition) {
-  recognition = new SpeechRecognition();
-  recognition.lang = "ja-JP";
-  recognition.interimResults = true;
-  recognition.continuous = false;
-
-  recognition.onstart = () => {
-    $("voiceInputButton").textContent = "🎙 聞き取り中…";
-    setStatus("音声入力中");
-  };
-
-  recognition.onresult = event => {
-    let transcript = "";
-
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      transcript += event.results[i][0].transcript;
-    }
-
-    $("question").value = transcript;
-  };
-
-  recognition.onerror = event => {
-    showError("音声入力エラー：" + event.error, "questionError");
-  };
-
-  recognition.onend = () => {
-    $("voiceInputButton").textContent = "🎙 音声入力";
-    setStatus("準備完了");
-  };
-
-  $("voiceInputButton").addEventListener("click", () => {
-    try {
-      recognition.start();
-    } catch (error) {
-      console.warn(error);
-    }
-  });
-
-} else {
-  $("voiceInputButton").addEventListener("click", () => {
-    showError(
-      "このブラウザでは音声入力に対応していません。文字で質問してください。",
-      "questionError"
-    );
-  });
+function setupSpeechRecognition(){
+  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SpeechRecognition){$('voiceStatus').textContent='このブラウザは音声入力に対応していません。Chromeなどをお試しください。';$('newMic').disabled=true;$('conversationMic').disabled=true;return null;}
+  const r=new SpeechRecognition();r.lang='ja-JP';r.interimResults=true;r.continuous=false;
+  r.onstart=()=>{$('voiceStatus').textContent='聞き取り中…話してください。';if(activeMicTarget==='new'){$('newMic').classList.add('recording');$('newMic').textContent='🔴';}else{$('conversationMic').classList.add('recording');$('conversationMic').textContent='🔴 聞き取り中';}};
+  r.onresult=(event)=>{let finalText='',interim='';for(let i=event.resultIndex;i<event.results.length;i++){if(event.results[i].isFinal)finalText+=event.results[i][0].transcript;else interim+=event.results[i][0].transcript;}const target=activeMicTarget==='new'?'newQuestionInput':'followupInput';$(target).value=(finalText||interim);$('caption').textContent=finalText||interim;};
+  r.onerror=(event)=>{$('voiceStatus').textContent=event.error==='not-allowed'?'マイクの使用が許可されていません。ブラウザの設定を確認してください。':'音声入力エラー：'+event.error;};
+  r.onend=()=>{$('newMic').classList.remove('recording');$('newMic').textContent='🎙';$('conversationMic').classList.remove('recording');$('conversationMic').textContent='🎙 音声で追加質問';if($('voiceStatus').textContent==='聞き取り中…話してください。')$('voiceStatus').textContent='聞き取り終了。内容を確認して送信してください。';};
+  return r;
 }
+recognition=setupSpeechRecognition();
+function startMic(target){if(!recognition)return;activeMicTarget=target;try{recognition.start();}catch(e){$('voiceStatus').textContent='音声入力を準備中です。少し待ってから再度押してください。';}}
+$('newMic').addEventListener('click',()=>startMic('new'));
+$('conversationMic').addEventListener('click',()=>startMic('followup'));
 
-/* 起動時の初期設定 */
-if ("speechSynthesis" in window) {
-  refreshVoices();
-  window.speechSynthesis.onvoiceschanged = refreshVoices;
+function speakText(text){
+  if(!('speechSynthesis' in window)){ $('voiceStatus').textContent='このブラウザは音声読み上げに対応していません。';return; }
+  if(!text.trim()){$('voiceStatus').textContent='読み上げる回答がまだありません。';return;}
+  window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(text);speakingUtterance=utterance;utterance.lang='ja-JP';utterance.rate=1.0;utterance.pitch=1.0;
+  const voices=window.speechSynthesis.getVoices();const japaneseVoice=voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith('ja'));if(japaneseVoice)utterance.voice=japaneseVoice;
+  utterance.onstart=()=>{$('voiceStatus').textContent='回答を読み上げています…';$('caption').textContent=text;};
+  utterance.onboundary=(event)=>{if(event.name==='word'&&Number.isFinite(event.charIndex)){$('caption').textContent=text.slice(0,event.charIndex)+'▏\n'+text.slice(event.charIndex);}};
+  utterance.onend=()=>{$('voiceStatus').textContent='読み上げが終了しました。';$('caption').textContent=text;};
+  utterance.onerror=()=>{$('voiceStatus').textContent='音声読み上げを開始できませんでした。';};window.speechSynthesis.speak(utterance);
 }
-
-try {
-  const theme = localStorage.getItem("nexusTheme") || "dark";
-  $("themeSelect").value = theme;
-  document.body.classList.toggle("theme-light", theme === "light");
-
-  const density = localStorage.getItem("nexusDensity") || "normal";
-  $("densitySelect").value = density;
-  document.body.classList.toggle("compact", density === "compact");
-  document.body.classList.toggle("no-borders", density === "borderless");
-
-  const font = localStorage.getItem("nexusFont") || "1";
-  $("fontSelect").value = font;
-  document.documentElement.style.setProperty("--font-scale", font);
-
-} catch {}
-
-loadHistory();
-updateStatus();
+$('readAnswer').addEventListener('click',()=>speakText(lastAnswer||currentExplanation));
+$('stopSpeech').addEventListener('click',()=>{if('speechSynthesis'in window)window.speechSynthesis.cancel();if(recognition){try{recognition.stop();}catch(e){}}$('voiceStatus').textContent='音声を停止しました。'});
+for(const id of ['newQuestionInput','followupInput'])$(id).addEventListener('keydown',(event)=>{if(event.key==='Enter'&&(event.ctrlKey||event.metaKey)){event.preventDefault();$(id==='newQuestionInput'?'newQuestionForm':'followupForm').requestSubmit();}});
 </script>
 </body>
 </html>
