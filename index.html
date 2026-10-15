@@ -222,7 +222,20 @@ header {
 .orb.speaking {
   animation:pulse .8s ease-in-out infinite alternate;
 }
+.orb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.nexus-center-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 50%;
+}
+  
 @keyframes float {
   0%,100% { transform:translateY(0); }
   50% { transform:translateY(-8px); }
@@ -653,8 +666,10 @@ body.no-borders .settings-section {
   <section class="left">
 
     <section class="panel ai-panel">
-      <div class="ai-inner">
-        <div class="orb" id="orb"></div>
+        <div class="ai-inner">
+        <div class="orb" id="orb">
+          <img src="./nexus-logo.png" alt="NEXUS" class="nexus-center-logo">
+        </div>
         <div class="orb-label" id="orbLabel">READY TO LEARN</div>
         <div class="caption-area" id="captionArea" aria-live="polite"></div>
         <div class="ai-controls">
